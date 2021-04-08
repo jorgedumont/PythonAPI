@@ -19,7 +19,7 @@ def textblob2():
         "frase":request.json['frase']
     }
     analysis = TextBlob(request.json['frase']).translate(to='en')
-    return jsonify({'Polaridad': analysis.polarity},{'Subjetividad': analysis.subjectivity})
+    return jsonify(analysis.sentiment)
 
 if __name__ == '__main__':
     app.run(debug=True)
