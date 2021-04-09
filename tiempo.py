@@ -11,7 +11,7 @@ def cargarPueblo2(nombrepueblo):
     print(url)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    columnas = ["DiaSemana", "Fecha", "Maxima", "Minima", "Media"]
+    columnas = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media"]
     columnas2 = ["Humedad", "Presion", "Viento"]
     df = pd.DataFrame(columns=columnas)
     df2 = pd.DataFrame(columns=columnas2)
@@ -24,7 +24,8 @@ def cargarPueblo2(nombrepueblo):
         temp11 = int(maxima.get_text().replace("°", ""))
         temp22 = int(minima.get_text().replace("°", ""))
         tempmedia = int((temp11 + temp22)) / 2
-        fila = {"DiaSemana": diasemana.get_text(), "Fecha": fecha, "Maxima": temp11, "Minima": temp22,
+        nombrepueblo = nombrepueblo.replace("-", " ")
+        fila = {"NombrePueblo":nombrepueblo,"DiaSemana": diasemana.get_text(), "Fecha": fecha, "Maxima": temp11, "Minima": temp22,
                 "Media": tempmedia}
         df = df.append(fila, ignore_index=True)
     detalle = soup.find("div", {"class": "datadias detallado"})
@@ -37,8 +38,7 @@ def cargarPueblo2(nombrepueblo):
         df2 = df2.append(fila2, ignore_index=True)
     dfcombinado = pd.concat([df, df2], ignore_index=True, axis=1)
     print(dfcombinado)
-    header = ["DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
-    nombrepueblo = nombrepueblo.replace("-", " ")
+    header = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
     dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
 
 
