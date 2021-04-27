@@ -17,7 +17,7 @@ class CreateClimasTable extends Migration
             $table->id();
             $table->string('idMunicipio');
 
-            //$table->foreignId('Municipioss_id')
+            $table->foreign('idMunicipio')->references('id')->on('municipios');
 
             $table->string('Nombre');
             $table->date('Fecha');
