@@ -17,7 +17,7 @@ class CreateComentariosTable extends Migration
             $table->id();
             $table->integer('idLugar');
 
-            $table->foreign('idLugar')->references('id')->on('hotels','restaurantes','ocios');
+            //$table->foreign('idLugar')->references('id')->on('hotels','restaurantes','ocios');
             #$table->foreign('idLugar')->references('id')->on('restaurantes');
             #$table->foreign('idLugar')->references('id')->on('ocios');
 

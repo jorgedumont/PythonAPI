@@ -17,7 +17,7 @@ class CreateHotelsTable extends Migration
             $table->id();
             $table->integer('idMunicipio');
 
-            $table->foreign('idMunicipio')->references('id')->on('municipios');
+            //$table->foreign('idMunicipio')->references('id')->on('municipios');
 
             $table->string('Nombre');
             $table->string('Descripcion');
