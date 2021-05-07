@@ -24,7 +24,7 @@ class ImportsController extends Controller
         tiempoToBBDD($response);
 
     }
-    
+    /*
     public function tiempoToBBDD(Response $response)
     {
         $conn = mysqli_connect($DB_HOST,$DB_USERNAME,$DB_PASSWORD,$DB_DATABASE);
@@ -39,6 +39,6 @@ class ImportsController extends Controller
             mysqli_query($conn, $sql);
         }
         echo "Datos Clima en BBDD!";
-    }
+    }*/
     
 }
