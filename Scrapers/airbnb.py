@@ -6,12 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 import pandas as pd
+from sys import argv
+
 def Airbnb(vArg):
 
         #Opciones de navegacion
         vOptions = webdriver.ChromeOptions()
 
-        vDriverPath = "C:\\Users\\jdumo\\Downloads\\chromedriver.exe"
+        vDriverPath = "C:\\Users\\manu1\\Downloads\\chromedriver.exe"
         vDriver = webdriver.Chrome(vDriverPath, options=vOptions)
 
         #Inciar en 2 pantalla
@@ -246,14 +248,14 @@ def Airbnb(vArg):
         dfCasas.to_csv("./Datos/dataCasas" + vArg + ".csv", encoding='utf-8-sig', sep=';', index=False)
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos=pd.read_excel("./Datos/list-mun-2012.xls")
+    nombrespueblos=pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"]=nombrespueblos["Municipio"].str.lower()
     nombrespueblos=nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
 
 
-print('¿Que localidad estas buscando?')
-vArg = input()
+#print('¿Que localidad estas buscando?')
+vArg = argv[1]
 if comprobarPueblo(vArg):
     Airbnb(vArg)
 else:

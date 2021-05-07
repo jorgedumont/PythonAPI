@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from sys import argv
 
 
 def cargarPueblo2(nombrepueblo):
@@ -39,18 +40,19 @@ def cargarPueblo2(nombrepueblo):
     dfcombinado = pd.concat([df, df2], ignore_index=True, axis=1)
     print(dfcombinado)
     header = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
-    dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
+    print(dfcombinado.to_json(orient='records',lines=False))
+    #dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
 
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos = pd.read_excel("./Datos/list-mun-2012.xls")
+    nombrespueblos = pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"] = nombrespueblos["Municipio"].str.lower()
     nombrespueblos = nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
 
 
-print('¿Que localidad estas buscando?')
-nombrepueblo = input()
+#print('¿Que localidad estas buscando?')
+nombrepueblo = argv[1] #Hay que pasar el argv entrecomillado en la shell
 if comprobarPueblo(nombrepueblo):
     cargarPueblo2(nombrepueblo)
 else:

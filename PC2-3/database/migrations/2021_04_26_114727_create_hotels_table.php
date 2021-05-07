@@ -16,15 +16,16 @@ class CreateHotelsTable extends Migration
         Schema::create('hotels', function (Blueprint $table) {
             $table->id();
             $table->integer('idMunicipio');
-
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
-
             $table->string('Nombre');
             $table->string('Descripcion');
             $table->string('Caracteristicas');
             $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
+        });
+
+        Schema::table('hotels', function (Blueprint $table) {
+            //$table->foreign('idMunicipio')->references('identificador')->on('municipios');
         });
     }
 

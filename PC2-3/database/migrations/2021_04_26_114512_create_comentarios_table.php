@@ -16,15 +16,16 @@ class CreateComentariosTable extends Migration
         Schema::create('comentarios', function (Blueprint $table) {
             $table->id();
             $table->integer('idLugar');
-
-            //$table->foreign('idLugar')->references('id')->on('hotels','restaurantes','ocios');
-            #$table->foreign('idLugar')->references('id')->on('restaurantes');
-            #$table->foreign('idLugar')->references('id')->on('ocios');
-
             $table->string('Nombre');
             $table->string('Descripcion');
             $table->string('Referencia');
             $table->timestamps();
+        });
+
+        Schema::table('comentarios', function (Blueprint $table){
+            //$table->foreign('idLugar')->references('id')->on('hotels','restaurantes','ocios');
+            #$table->foreign('idLugar')->references('id')->on('restaurantes');
+            #$table->foreign('idLugar')->references('id')->on('ocios');
         });
     }
 

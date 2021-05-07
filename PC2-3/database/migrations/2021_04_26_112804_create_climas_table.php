@@ -15,10 +15,7 @@ class CreateClimasTable extends Migration
     {
         Schema::create('climas', function (Blueprint $table) {
             $table->id();
-            $table->string('idMunicipio');
-
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
-
+            $table->integer('idMunicipio');
             $table->string('Nombre');
             $table->date('Fecha');
             $table->integer('tMaxima');
@@ -29,7 +26,12 @@ class CreateClimasTable extends Migration
             $table->integer('Viento');
             $table->timestamps();
         });
+
+        Schema::table('climas', function (Blueprint $table) {
+            //$table->foreign('idMunicipio')->references('identificador')->on('municipios');
+        });
     }
+
 
     /**
      * Reverse the migrations.
