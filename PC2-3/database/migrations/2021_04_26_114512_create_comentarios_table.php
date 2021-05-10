@@ -24,8 +24,8 @@ class CreateComentariosTable extends Migration
 
         Schema::table('comentarios', function (Blueprint $table){
             //$table->foreign('idLugar')->references('id')->on('hotels','restaurantes','ocios');
-            #$table->foreign('idLugar')->references('id')->on('restaurantes');
-            #$table->foreign('idLugar')->references('id')->on('ocios');
+            //$table->foreign('idLugar')->references('id')->on('restaurantes');
+            //$table->foreign('idLugar')->references('id')->on('ocios');
         });
     }
 

@@ -15,7 +15,7 @@ class CreateHotelsTable extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->id();
-            $table->integer('idMunicipio');
+            $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
             $table->string('Descripcion');
             $table->string('Caracteristicas');
@@ -25,7 +25,7 @@ class CreateHotelsTable extends Migration
         });
 
         Schema::table('hotels', function (Blueprint $table) {
-            //$table->foreign('idMunicipio')->references('identificador')->on('municipios');
+            //$table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
 

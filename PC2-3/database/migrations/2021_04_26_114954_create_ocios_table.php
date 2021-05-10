@@ -15,7 +15,7 @@ class CreateOciosTable extends Migration
     {
         Schema::create('ocios', function (Blueprint $table) {
             $table->id();
-            $table->integer('idMunicipio');
+            $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
             $table->string('Comentario');
             $table->string('Referencia');

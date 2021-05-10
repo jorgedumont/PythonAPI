@@ -168,9 +168,9 @@ def tripAd(vArg):
                     dfRestaurantes = dfRestaurantes.append({'Municipio':vArg, 'Nombre':vElementTitulo.text, 'Detalles':vDetalles, 'Referencia':vUrl+vElement1Url}, ignore_index=True)
                     lUrlComentarios.append(vUrl+vElement1Url)
                     
-    print(dfOcio)
-    print(dfHoteles)
-    print(dfRestaurantes)
+    print(dfOcio.to_json(orient='records',lines=False))
+    print(dfHoteles.to_json(orient='records',lines=False))
+    print(dfRestaurantes.to_json(orient='records',lines=False))
     #dfOcio.to_csv("./dataOcio.csv", encoding='utf-8-sig', sep=';', index = False)
     #dfHoteles.to_csv("./dataHoteles.csv", encoding='utf-8-sig', sep=';', index = False)
     #dfRestaurantes.to_csv("./dataRestaurantes.csv", encoding='utf-8-sig', sep=';', index = False)
@@ -217,7 +217,7 @@ def tripAdComentarios(lUrlComentarios, vArg):
         
         #print('--------------------------')
 
-    print(dfComentarios)
+    #print(dfComentarios.to_json(orient='records',lines=False))
     #dfComentarios.to_csv("./dataComentarios.csv", encoding='utf-8-sig', sep=';', index = False)
 
 def comprobarPueblo(nombrepueblo):

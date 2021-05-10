@@ -38,7 +38,7 @@ def cargarPueblo2(nombrepueblo):
         fila2 = {"Humedad": humedad.get_text(), "Presion": presion.get_text(), "Viento": viento.get_text()}
         df2 = df2.append(fila2, ignore_index=True)
     dfcombinado = pd.concat([df, df2], ignore_index=True, axis=1)
-    print(dfcombinado)
+    #print(dfcombinado)
     header = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
     print(dfcombinado.to_json(orient='records',lines=False))
     #dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
