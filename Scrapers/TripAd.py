@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 from sys import argv
+import json
 
 
 def tripAd(vArg):
@@ -171,9 +172,6 @@ def tripAd(vArg):
     print(dfOcio.to_json(orient='records',lines=False))
     print(dfHoteles.to_json(orient='records',lines=False))
     print(dfRestaurantes.to_json(orient='records',lines=False))
-    #dfOcio.to_csv("./dataOcio.csv", encoding='utf-8-sig', sep=';', index = False)
-    #dfHoteles.to_csv("./dataHoteles.csv", encoding='utf-8-sig', sep=';', index = False)
-    #dfRestaurantes.to_csv("./dataRestaurantes.csv", encoding='utf-8-sig', sep=';', index = False)
     #print(lUrlComentarios)
     return tripAdComentarios(lUrlComentarios=lUrlComentarios, vArg=vArg)
 
@@ -181,13 +179,20 @@ def tripAd(vArg):
 def tripAdComentarios(lUrlComentarios, vArg):
     vUrl = 'https://www.tripadvisor.es'
     #Creacion del DataFrame
-    dfComentarios = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
+    dfComentariosOcio = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
+    dfComentariosHoteles = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
+    dfComentariosRestaurantes = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     #Recorremos la lista recibida por parametro con las Url con las que se ha trabajado
+
     for i in lUrlComentarios:
+        print(i)
         vPage = requests.get(i)
         vSoup = BeautifulSoup(vPage.content, 'html.parser')
         vTitulo = vSoup.find("h1")#, {"id":"HEADING"}) or vSoup.find("h1", {"class":"_3a1XQ88S"})
         #print('TITULO: '+vTitulo.text)
+
+        vFiltro = str(i).split("_")[0]
+        #print(vFiltro)
 
         vComentarios = vSoup.findAll("div", {"class":"Dq9MAugU T870kzTX LnVzGwUB"}) or vSoup.findAll("div", {"class":"_2wrUUKlw _3hFEdNs8"}) or vSoup.findAll("div", {"class":"review-container"})
         #Recorremos cada comentario para almacenarlo en el df
@@ -195,8 +200,13 @@ def tripAdComentarios(lUrlComentarios, vArg):
             vC1 = e.find("q", {"class":"IRsGHoPm"}) or e.find("p", {"class":"partial_entry"})
             #print(vC1.text)
             #print('########################')
-            dfComentarios = dfComentarios.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-    
+            if "https://www.tripadvisor.es/Attraction" in vFiltro:
+                dfComentariosOcio = dfComentariosOcio.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+            elif "https://www.tripadvisor.es/Hotel" in vFiltro:
+                dfComentariosHoteles = dfComentariosHoteles.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+            else:
+                dfComentariosRestaurantes = dfComentariosRestaurantes.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+        
         #Declaramos la paginacion y la recorremos en caso de que exista    
         vPaginacion = vSoup.find("div", {"class":"pageNumbers"})
         if vPaginacion != None:
@@ -210,15 +220,29 @@ def tripAdComentarios(lUrlComentarios, vArg):
                     vC2 = e1.find("q", {"class":"IRsGHoPm"}) or e1.find("p", {"class":"partial_entry"})
                     #print(vC2.text)
                     #print('########################')
-                    dfComentarios = dfComentarios.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC2.text, 'Referencia':vUrlCompleta}, ignore_index=True)
+                    if "https://www.tripadvisor.es/Attraction" in vFiltro:
+                        dfComentariosOcio = dfComentariosOcio.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+                    elif "https://www.tripadvisor.es/Hotel" in vFiltro:
+                        dfComentariosHoteles = dfComentariosHoteles.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+                    else:
+                        dfComentariosRestaurantes = dfComentariosRestaurantes.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
+        
         else:
             print('No hay paginacion disponible')
                 
         
         #print('--------------------------')
-
-    #print(dfComentarios.to_json(orient='records',lines=False))
-    #dfComentarios.to_csv("./dataComentarios.csv", encoding='utf-8-sig', sep=';', index = False)
+    vJSONOcio = dfComentariosOcio.to_json(orient='records',lines=False)
+    vJSONHoteles = dfComentariosHoteles.to_json(orient='records',lines=False)
+    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records',lines=False)
+    '''
+    vJSONF = json.loads(vJSONOcio)
+    vJSONF = json.dumps(vJSONF, indent=2)
+    print(vJSONF)
+    '''
+    #print(vJSONOcio)
+    #print(vJSONHoteles)
+    #print(vJSONRestaurantes)
 
 def comprobarPueblo(nombrepueblo):
     nombrespueblos=pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
@@ -232,5 +256,5 @@ if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
     print("Nombre del pueblo no correcto")
-#
+
 

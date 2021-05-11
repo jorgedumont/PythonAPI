@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Clima extends Model
 {
     use HasFactory;
-    
+    //REPASAR
     $clima->Clima::'id';
     $clima->'idMunicipio';
     $clima->'Nombre';
@@ -19,4 +19,5 @@ class Clima extends Model
     $clima->'Humedad';
     $clima->'Presion';
     $clima->'Viento';
+
 }

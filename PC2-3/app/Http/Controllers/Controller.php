@@ -1,5 +1,6 @@
 <?php
-
+//header('Content-Type: application/json; charset=utf-8');
+//json_encode($data, JSON_UNESCAPED_UNICODE)
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
