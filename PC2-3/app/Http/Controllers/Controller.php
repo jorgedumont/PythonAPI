@@ -10,4 +10,22 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function scraperTiempo(){
+        $vArg = "tres cantos";
+        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
+        $result = exec($command);
+        //echo $result;
+        return $result;
+    }
+
+    public function scraperTripAdyComms(){
+        $vArg = "tres cantos";
+        set_time_limit (5000);
+        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
+        $result = exec($command);
+        //echo $result;
+        return $result;
+    }
+    
 }

@@ -15,15 +15,16 @@ class CreateRestaurantesTable extends Migration
     {
         Schema::create('restaurantes', function (Blueprint $table) {
             $table->id();
-            $table->integer('idMunicipio');
-
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
-
+            $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
             $table->string('Detalles');
             $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
+        });
+
+        Schema::table('restaurantes', function (Blueprint $table) {
+            //$table->foreign('idMunicipio')->references('identificador')->on('municipios');
         });
     }
 
