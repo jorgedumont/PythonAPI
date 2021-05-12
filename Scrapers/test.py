@@ -1,22 +1,15 @@
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-import time
+
 import json
+import pickle
 
 
-vData = [
-    {
-        Municipio: "tres cantos",
-        Nombre: "VP Jardín de Tres Cantos Hotel",
-        Comentario: "Soy recepcionista. La chica de la recepción me ha mentido diciendo que no había habitaciones esta noche. O bien han cerrado ventas mal o no han querido. Cualquiera diría que el turismo no esta en crisis con semejante personal que tan poco cuida a los clientes, que a día de hoy, tanta falta hacen en el sector turístico. Nada bueno que comentar. Nunca volveré a consultar disponibilidad en este hotel.",
-        Referencia: "https://www.tripadvisor.es/Hotel_Review-g562662-d234295-Reviews-VP_Jardin_de_Tres_Cantos-Tres_Cantos.html"
-    },
-    {
-        Municipio: "tres cantos",
-        Nombre: "VP Jardín de Tres Cantos Hotel",
-        Comentario: "grandes profesionales. la atención al cliente es excepcional. La limpieza chapeau. Javier y Mercedes son grandes profesionales y excelentes personas. Me hacen sentir como en casa. Respecto a la relación calidad-precio, no hay hotel que le pueda superar. El transporte público está muy cerca.",
-        Referencia: "https://www.tripadvisor.es/Hotel_Review-g562662-d234295-Reviews-VP_Jardin_de_Tres_Cantos-Tres_Cantos.html"
-    }
-]
+vData = [{"0":"tres cantos","1":"Hoy","2":"12 may","3":19,"4":9,"5":14.0,"6":"57%","7":"1018hPa","8":"28 km\/h"},{"0":"tres cantos","1":"Ma\u00f1ana","2":"13 may","3":17,"4":7,"5":12.0,"6":"64%","7":"1016hPa","8":"22 km\/h"},{"0":"tres cantos","1":"Viernes","2":"14 may","3":21,"4":8,"5":14.5,"6":"56%","7":"1016hPa","8":"20 km\/h"},{"0":"tres cantos","1":"S\u00e1bado","2":"15 may","3":24,"4":10,"5":17.0,"6":"57%","7":"1017hPa","8":"20 km\/h"},{"0":"tres cantos","1":"Domingo","2":"16 may","3":28,"4":14,"5":21.0,"6":"51%","7":"1016hPa","8":"23 km\/h"},{"0":"tres cantos","1":"Lunes","2":"17 may","3":24,"4":12,"5":18.0,"6":"50%","7":"1017hPa","8":"12 km\/h"},{"0":"tres cantos","1":"Martes","2":"18 may","3":26,"4":13,"5":19.5,"6":"38%","7":"1019hPa","8":"16 km\/h"}]
+
+vData1 = json.dumps(vData)
+
+vData2 = json.loads(vData1)
+
+print(vData2)
+
+
+
