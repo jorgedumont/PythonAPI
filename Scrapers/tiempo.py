@@ -45,7 +45,7 @@ def cargarPueblo2(nombrepueblo):
 
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos = pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
+    nombrespueblos = pd.read_excel("C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"] = nombrespueblos["Municipio"].str.lower()
     nombrespueblos = nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
