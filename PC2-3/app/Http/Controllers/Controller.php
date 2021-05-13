@@ -16,6 +16,7 @@ class Controller extends BaseController
         $vArg = "tres cantos";
         $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
         $result = exec($command);
+        $result = utf8_encode($result);
         //echo $result;
         return $result;
     }

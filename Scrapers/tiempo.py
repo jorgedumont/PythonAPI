@@ -41,10 +41,8 @@ def cargarPueblo2(nombrepueblo):
     dfcombinado = pd.concat([df, df2], ignore_index=True, axis=1)
     #print(dfcombinado)
     header = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
-    vJSONTiempo = dfcombinado.to_json(orient='records',lines=False)
-    vJSONTiempo1 = json.dumps(vJSONTiempo)
-    vJSONTiempo2 = json.loads(vJSONTiempo1)
-    print(vJSONTiempo2)
+    vJSONTiempo = dfcombinado.to_json(orient='records',lines=False, force_ascii=False)
+    print(vJSONTiempo)
     #dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
 
 

@@ -182,6 +182,7 @@ def tripAdComentarios(lUrlComentarios, vArg):
     dfComentariosOcio = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     dfComentariosHoteles = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     dfComentariosRestaurantes = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
+    dfGlobal = pd.DataFrame(index=["dfComentariosOcio", "dfComentariosHoteles", "dfComentariosRestaurantes"], columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     #Recorremos la lista recibida por parametro con las Url con las que se ha trabajado
 
     for i in lUrlComentarios:
@@ -232,14 +233,14 @@ def tripAdComentarios(lUrlComentarios, vArg):
                 
         
         #print('--------------------------')
+    dfGlobal = dfGlobal.append(dfComentariosOcio)
+    dfGlobal = dfGlobal.append(dfComentariosHoteles)
+    dfGlobal = dfGlobal.append(dfComentariosRestaurantes)
+    
     vJSONOcio = dfComentariosOcio.to_json(orient='records',lines=False)
     vJSONHoteles = dfComentariosHoteles.to_json(orient='records',lines=False)
     vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records',lines=False)
-    '''
-    vJSONF = json.loads(vJSONOcio)
-    vJSONF = json.dumps(vJSONF, indent=2)
-    print(vJSONF)
-    '''
+    print(dfGlobal)
     #print(vJSONOcio)
     #print(vJSONHoteles)
     #print(vJSONRestaurantes)
