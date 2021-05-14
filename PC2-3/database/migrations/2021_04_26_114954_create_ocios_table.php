@@ -23,7 +23,7 @@ class CreateOciosTable extends Migration
         });
 
         Schema::table('ocios', function (Blueprint $table) {
-            //$table->foreign('idMunicipio')->references('identificador')->on('municipios');
+            $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
 

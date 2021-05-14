@@ -1,6 +1,4 @@
 <?php
-//header('Content-Type: application/json; charset=utf-8');
-//json_encode($data, JSON_UNESCAPED_UNICODE)
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -12,7 +10,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function scraperTiempo(){
+    public function scraperTiempo()
+    {
         $vArg = "tres cantos";
         $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
         $result = exec($command);
@@ -21,11 +20,13 @@ class Controller extends BaseController
         return $result;
     }
 
-    public function scraperTripAdyComms(){
+    public function scraperTripAdyComms()
+    {
         $vArg = "tres cantos";
         set_time_limit (5000);
-        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
+        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\test.py "; #. escapeshellarg($vArg);
         $result = exec($command);
+        $result = utf8_encode($result);
         //echo $result;
         return $result;
     }

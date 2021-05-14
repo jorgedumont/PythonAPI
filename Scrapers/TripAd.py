@@ -169,10 +169,10 @@ def tripAd(vArg):
                     dfRestaurantes = dfRestaurantes.append({'Municipio':vArg, 'Nombre':vElementTitulo.text, 'Detalles':vDetalles, 'Referencia':vUrl+vElement1Url}, ignore_index=True)
                     lUrlComentarios.append(vUrl+vElement1Url)
                     
-    print(dfOcio.to_json(orient='records',lines=False))
-    print(dfHoteles.to_json(orient='records',lines=False))
-    print(dfRestaurantes.to_json(orient='records',lines=False))
-    #print(lUrlComentarios)
+    #print(dfOcio.to_json(orient='records',lines=False))
+    #print(dfHoteles.to_json(orient='records',lines=False))
+    #print(dfRestaurantes.to_json(orient='records',lines=False))
+    print(lUrlComentarios)
     return tripAdComentarios(lUrlComentarios=lUrlComentarios, vArg=vArg)
 
 
@@ -182,11 +182,10 @@ def tripAdComentarios(lUrlComentarios, vArg):
     dfComentariosOcio = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     dfComentariosHoteles = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
     dfComentariosRestaurantes = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
-    dfGlobal = pd.DataFrame(index=["dfComentariosOcio", "dfComentariosHoteles", "dfComentariosRestaurantes"], columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
-    #Recorremos la lista recibida por parametro con las Url con las que se ha trabajado
 
+    #Recorremos la lista recibida por parametro con las Url con las que se ha trabajado
     for i in lUrlComentarios:
-        print(i)
+        #print(i)
         vPage = requests.get(i)
         vSoup = BeautifulSoup(vPage.content, 'html.parser')
         vTitulo = vSoup.find("h1")#, {"id":"HEADING"}) or vSoup.find("h1", {"class":"_3a1XQ88S"})
@@ -233,14 +232,10 @@ def tripAdComentarios(lUrlComentarios, vArg):
                 
         
         #print('--------------------------')
-    dfGlobal = dfGlobal.append(dfComentariosOcio)
-    dfGlobal = dfGlobal.append(dfComentariosHoteles)
-    dfGlobal = dfGlobal.append(dfComentariosRestaurantes)
     
-    vJSONOcio = dfComentariosOcio.to_json(orient='records',lines=False)
-    vJSONHoteles = dfComentariosHoteles.to_json(orient='records',lines=False)
-    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records',lines=False)
-    print(dfGlobal)
+    vJSONOcio = dfComentariosOcio.to_json(orient='records',lines=False, force_ascii=False)
+    vJSONHoteles = dfComentariosHoteles.to_json(orient='records',lines=False, force_ascii=False)
+    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records',lines=False, force_ascii=False)
     #print(vJSONOcio)
     #print(vJSONHoteles)
     #print(vJSONRestaurantes)
@@ -252,7 +247,7 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = argv[1]
+vArg = "tres cantos"#argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:

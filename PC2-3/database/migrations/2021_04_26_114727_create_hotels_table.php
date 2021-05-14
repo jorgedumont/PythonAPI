@@ -25,7 +25,7 @@ class CreateHotelsTable extends Migration
         });
 
         Schema::table('hotels', function (Blueprint $table) {
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
+            $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
 
