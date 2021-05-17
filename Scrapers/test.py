@@ -68,9 +68,9 @@ def tripAdComentarios(lUrlComentarios, vArg):
         
         #print('--------------------------')
     
-    vJSONOcio = dfComentariosOcio.to_json(orient='index',lines=False)
-    vJSONHoteles= dfComentariosHoteles.to_json(orient='index',lines=False)
-    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='index',lines=False)
+    vJSONOcio = dfComentariosOcio.to_json(orient='records', lines=False)
+    vJSONHoteles= dfComentariosHoteles.to_json(orient='records', lines=False)
+    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records', lines=False)
     vFinalJson = {'ocio':json.loads(vJSONOcio), 'hoteles':json.loads(vJSONHoteles), 'restaurantes':json.loads(vJSONRestaurantes)}
     #print(vJSONOcio)
     print(vFinalJson) 

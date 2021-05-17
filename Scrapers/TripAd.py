@@ -75,7 +75,8 @@ def tripAd(vArg):
             .until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[2]/div/div/div/div/div/div'))).click()
 
     #Para cambiar la nueva pestaña a la actual y recogerla para trabajar con BS
-    vDriver.switch_to_window(vDriver.window_handles[-1])
+    vWindow = vDriver.window_handles[-1]
+    vDriver.switch_to.window(vWindow)
     vUrlLocalidad = vDriver.current_url
 
 
@@ -233,10 +234,12 @@ def tripAdComentarios(lUrlComentarios, vArg):
         
         #print('--------------------------')
     
-    vJSONOcio = dfComentariosOcio.to_json(orient='records',lines=False, force_ascii=False)
-    vJSONHoteles = dfComentariosHoteles.to_json(orient='records',lines=False, force_ascii=False)
-    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records',lines=False, force_ascii=False)
+    vJSONOcio = dfComentariosOcio.to_json(orient='records', lines=False)
+    vJSONHoteles= dfComentariosHoteles.to_json(orient='records', lines=False)
+    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records', lines=False)
+    vFinalJson = {'ocio':json.loads(vJSONOcio), 'hoteles':json.loads(vJSONHoteles), 'restaurantes':json.loads(vJSONRestaurantes)}
     #print(vJSONOcio)
+    print(vFinalJson) 
     #print(vJSONHoteles)
     #print(vJSONRestaurantes)
 
@@ -247,7 +250,7 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = "tres cantos"#argv[1]
+vArg = argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
