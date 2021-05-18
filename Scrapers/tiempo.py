@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from sys import argv
+import json
 
 
 def cargarPueblo2(nombrepueblo):
@@ -9,7 +10,7 @@ def cargarPueblo2(nombrepueblo):
     url = 'https://www.tutiempo.net/' + nombrepueblo + '.html?datos=detallados'
     if url is None:
         return False
-    print(url)
+    #print(url)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     columnas = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media"]
@@ -40,7 +41,8 @@ def cargarPueblo2(nombrepueblo):
     dfcombinado = pd.concat([df, df2], ignore_index=True, axis=1)
     #print(dfcombinado)
     header = ["NombrePueblo","DiaSemana", "Fecha", "Maxima", "Minima", "Media", "Humedad", "Presion", "Viento"]
-    print(dfcombinado.to_json(orient='records',lines=False))
+    vJSONTiempo = dfcombinado.to_json(orient='records',lines=False, force_ascii=False)
+    print(vJSONTiempo)
     #dfcombinado.to_csv("./Datos/" + "dataTiempo" + nombrepueblo + ".csv", header=header, index=False, encoding='utf-8-sig')
 
 
