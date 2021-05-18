@@ -7,6 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -14,7 +15,9 @@ class Controller extends BaseController
     public function scraperTiempo()
     {
         $vArg = "tres cantos";
-        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\tiempo.py" . escapeshellarg($vArg);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH');
+        $command = $vPython." ".$vScript." " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         //echo $result;

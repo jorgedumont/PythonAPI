@@ -56,8 +56,6 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'python_path' => env('PYTHON_PATH', false),
-    'tiempo_script_path' => env('TIEMPO_SCRIPT_PATH', false),
 
     /*
     |--------------------------------------------------------------------------
