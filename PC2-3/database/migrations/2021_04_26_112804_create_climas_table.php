@@ -19,7 +19,7 @@ class CreateClimasTable extends Migration
             $table->string('Nombre');
             $table->date('Fecha');
             $table->integer('tMaxima');
-            $table->integer('tMainima');
+            $table->integer('tMinima');
             $table->double('tMedia');
             $table->integer('Humedad');
             $table->integer('Presion');
@@ -31,7 +31,6 @@ class CreateClimasTable extends Migration
             $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
-
 
     /**
      * Reverse the migrations.
