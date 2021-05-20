@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class Controller extends BaseController
@@ -27,7 +28,9 @@ class Controller extends BaseController
     public function scraperTiempo2(Request $request)
     {
         $vArg = $request->input('name');
-        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH');
+        $command = $vPython." ".$vScript." " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         //echo $result;
@@ -39,11 +42,31 @@ class Controller extends BaseController
     {
         $vArg = "tres cantos";
         set_time_limit (5000);
-        $command = "C:\Users\manu1\Anaconda3\python.exe C:\\Users\\manu1\\GitHub\\PythonAPI\\Scrapers\\test.py " . escapeshellarg($vArg);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TRIPADVISOR_SCRIPT_PATH');
+        $command = $vPython." ".$vScript." " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         //echo $result;
         return $result;
+    }
+
+    public function estadisticasUsuarios()
+    {
+        $usuarios = DB::table('users')->count();
+        return $usuarios;
+    }
+
+    public function estadisticasSesiones()
+    {
+        $sesiones = DB::table('sessions')->count();
+        return $sesiones;
+    }
+
+    public function estadisticasFallos()
+    {
+        $fallos = DB::table('failed_jobs')->count();
+        return $fallos;
     }
     
 }
