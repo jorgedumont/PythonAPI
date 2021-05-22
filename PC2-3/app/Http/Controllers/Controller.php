@@ -27,19 +27,19 @@ class Controller extends BaseController
 
     public function scraperTiempo(){
         $vArg = "tres cantos";
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
         $result = utf8_encode($result);
         echo $result;
+        echo "-------------";
         $result = json_decode($result,true);
         //echo gettype($result);
         $idMunicipio=$result[0]["idMunicipio"];
         $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
         $row = mysqli_fetch_assoc($query);
         $id = $row['id'];
-        //echo $id;
         //$id=24930;
         foreach($result as $value){
             $idMunicipio=$value["idMunicipio"];
@@ -51,8 +51,21 @@ class Controller extends BaseController
             $Humedad=$value["Humedad"];
             $Presion=$value["Presion"];
             $Viento=$value["Viento"];
-            $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
-  VALUES ('$id', '$Fecha','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+            $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
+            $fecha_select = $row_select_fecha['Fecha'];
+            if($fecha_select == $Fecha ){
+                $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+                //echo "Datos actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
+                    VALUES ('$id', '$Fecha','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+                //echo "Nuevos datos - ";
+            }
+            
+            
             //echo $query . "\n";
             /*if (!mysqli_query($dbconnect, $query2)) {
                 echo('Error insertando en la tabla de climas'. "\n");
@@ -64,7 +77,7 @@ class Controller extends BaseController
         }*/
     public function scraperTiempo2(Request $request){
         $arg = $request->input('name');
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
@@ -102,7 +115,7 @@ class Controller extends BaseController
     public function scraperTripAdyComms(){
         $vArg = "tres cantos";
         set_time_limit (5000);
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
         $result = exec($command);
         //echo $result;
         return $result;

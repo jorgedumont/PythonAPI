@@ -1,8 +1,8 @@
 ﻿idMunicipio,Nombre,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento
-tres cantos,Hoy,19 may,24,11,17.5,50,1021,12 
-tres cantos,Mañana,20 may,27,9,18.0,39,1021,11 
-tres cantos,Viernes,21 may,27,13,20.0,42,1014,27 
-tres cantos,Sábado,22 may,21,12,16.5,43,1014,17 
-tres cantos,Domingo,23 may,20,10,15.0,42,1014,13 
-tres cantos,Lunes,24 may,25,9,17.0,53,1015,18 
-tres cantos,Martes,25 may,21,14,17.5,70,1013,15 
+tres cantos,Hoy,22 may,20,13,16.5,42,1014,19 
+tres cantos,Mañana,23 may,19,10,14.5,43,1016,19 
+tres cantos,Lunes,24 may,21,8,14.5,48,1021,21 
+tres cantos,Martes,25 may,25,10,17.5,46,1022,16 
+tres cantos,Miércoles,26 may,27,12,19.5,43,1018,11 
+tres cantos,Jueves,27 may,25,14,19.5,43,1014,10 
+tres cantos,Viernes,28 may,28,16,22.0,43,1014,15 
