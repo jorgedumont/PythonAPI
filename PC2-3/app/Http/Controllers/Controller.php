@@ -111,6 +111,54 @@ class Controller extends BaseController
         }
         return response()->json($result);
     }
+
+    public function scraperTripAdyComms()
+    {
+        $vArg = "tres cantos";
+        set_time_limit (5000);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TRIPADVISOR_SCRIPT_PATH');
+        $command = $vPython." ".$vScript." " . escapeshellarg($vArg);
+        $result = exec($command);
+        $result = utf8_encode($result);
+        //echo $result;
+        return $result;
+    }
+
+    public function estadisticasUsuarios()
+    {
+        $usuarios = DB::table('users')->count();
+        return $usuarios;
+    }
+
+    public function estadisticasSesiones()
+    {
+        $sesiones = DB::table('sessions')->count();
+        return $sesiones;
+    }
+
+    public function estadisticasFallos()
+    {
+        $fallos = DB::table('failed_jobs')->count();
+        return $fallos;
+    }
+    
+    public function graficaFechas()
+    {
+        $aFechas = [];
+        $data = DB::table('users')->get();
+        $data = json_encode($data);
+        $data = json_decode($data, true);
+        foreach ($data as $value){
+            $fecha = $value['created_at'];
+            $fecha = explode(" ", $fecha);
+            $fecha = $fecha[0];
+            //print($fecha . " / ");
+            array_push($aFechas, $fecha);
+        }
+
+        return(array_count_values($aFechas));
+    }
     
     
     
