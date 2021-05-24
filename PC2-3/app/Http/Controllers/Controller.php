@@ -69,4 +69,20 @@ class Controller extends BaseController
         return $fallos;
     }
     
+    public function graficaFechas()
+    {
+        $aFechas = [];
+        $data = DB::table('users')->get();
+        $data = json_encode($data);
+        $data = json_decode($data, true);
+        foreach ($data as $value){
+            $fecha = $value['created_at'];
+            $fecha = explode(" ", $fecha);
+            $fecha = $fecha[0];
+            //print($fecha . " / ");
+            array_push($aFechas, $fecha);
+        }
+
+        return(array_count_values($aFechas));
+    }
 }

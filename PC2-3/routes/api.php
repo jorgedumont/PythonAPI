@@ -38,3 +38,5 @@ Route::get('buscar.tripadvisor', 'App\Http\Controllers\Controller@scraperTripAdy
 Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadisticasUsuarios');
 Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');
 Route::get('estadisticas.fallos', 'App\Http\Controllers\Controller@estadisticasFallos');
+
+Route::get('grafica.fechas', 'App\Http\Controllers\Controller@graficaFechas');
