@@ -28,7 +28,7 @@ class Controller extends BaseController
 
     public function scraperTiempo(){
         $vArg = "tres cantos";
-        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
+        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
@@ -78,7 +78,7 @@ class Controller extends BaseController
         }*/
     public function scraperTiempo2(Request $request){
         $arg = $request->input('name');
-        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
@@ -130,9 +130,7 @@ class Controller extends BaseController
     {
         $vArg = "tres cantos";
         set_time_limit (5000);
-        $vPython = env('PYTHON_PATH');
-        $vScript = env('TRIPADVISOR_SCRIPT_PATH');
-        $command = $vPython." ".$vScript." " . escapeshellarg($vArg);
+        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         //echo $result;
