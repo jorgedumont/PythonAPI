@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Controller extends BaseController
 {
@@ -35,6 +36,9 @@ class Controller extends BaseController
         $result = utf8_encode($result);
         echo $result;
         //echo "-------------";
+        //$fecha_carbon = Carbon::now();
+        $fecha_carbon = new Carbon("yesterday");      
+        //echo "-------------";
         $result = json_decode($result,true);
         //echo gettype($result);
         $idMunicipio=$result[0]["idMunicipio"];
@@ -43,6 +47,8 @@ class Controller extends BaseController
         $id = $row['id'];
         //$id=24930;
         foreach($result as $value){
+            $fecha_carbon = $fecha_carbon->addDays(1);
+            
             $idMunicipio=$value["idMunicipio"];
             $Nombre=$value["Nombre"];
             $Fecha=$value["Fecha"];
@@ -52,17 +58,18 @@ class Controller extends BaseController
             $Humedad=$value["Humedad"];
             $Presion=$value["Presion"];
             $Viento=$value["Viento"];
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
             $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
             $fecha_select = $row_select_fecha['Fecha'];
-            if($fecha_select == $Fecha ){
+            if($fecha_select == $fecha_carbon ){
                 $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
-                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
                 //echo "Datos actualizados - ";
             }
             else{
                 $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
-                    VALUES ('$id', '$Fecha','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+                    VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
                 //echo "Nuevos datos - ";
             }
             
@@ -85,6 +92,7 @@ class Controller extends BaseController
         //echo $result;
         $result = utf8_encode($result);
         $result = json_decode($result,true);
+        $fecha_carbon = new Carbon("yesterday"); 
         //echo gettype($result);
         $idMunicipio=$result[0]["idMunicipio"];
         $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
@@ -93,6 +101,8 @@ class Controller extends BaseController
         //echo $id;
         //$id=24930;
         foreach($result as $value){
+            $fecha_carbon = $fecha_carbon->addDays(1);
+
             $idMunicipio=$value["idMunicipio"];
             $Nombre=$value["Nombre"];
             $Fecha=$value["Fecha"];
@@ -103,17 +113,17 @@ class Controller extends BaseController
             $Presion=$value["Presion"];
             $Viento=$value["Viento"];
             
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
             $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
             $fecha_select = $row_select_fecha['Fecha'];
-            if($fecha_select == $Fecha ){
+            if($fecha_select == $Fecha_carbon ){
                 $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
-                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha')");
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha_carbon')");
                 //echo "Datos actualizados - ";
             }
             else{
                 $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
-                    VALUES ('$id', '$Fecha','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+                    VALUES ('$id', '$Fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
                 //echo "Nuevos datos - ";
             }
             
