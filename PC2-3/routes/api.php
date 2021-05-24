@@ -34,3 +34,9 @@ Route::post('buscar.tiempo2', 'App\Http\Controllers\Controller@scraperTiempo2');
 #Route::post('buscar.tiempo', ImportsController::class);
 
 Route::get('buscar.tripadvisor', 'App\Http\Controllers\Controller@scraperTripAdyComms');
+
+Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadisticasUsuarios');
+Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');
+Route::get('estadisticas.fallos', 'App\Http\Controllers\Controller@estadisticasFallos');
+
+Route::get('grafica.fechas', 'App\Http\Controllers\Controller@graficaFechas');

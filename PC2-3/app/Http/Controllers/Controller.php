@@ -111,16 +111,7 @@ class Controller extends BaseController
         }
         return response()->json($result);
     }
-
-    public function scraperTripAdyComms(){
-        $vArg = "tres cantos";
-        set_time_limit (5000);
-        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
-        $result = exec($command);
-        //echo $result;
-        return $result;
-    }
-
+    
     
     
 }
