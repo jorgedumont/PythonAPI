@@ -149,10 +149,52 @@ class Controller extends BaseController
 
 
     public function insert_localizaciones_TripAd($result, $vArg, $idMunicipio, $dbconnect){
-        echo "-------------";
-        echo $idMunicipio;
-        echo "-------------";
+       
+        $json_ocio = $result["lugares"]["ocio"];
+        $json_hoteles = $result["lugares"]["hoteles"];
+        $json_restaurantes = $result["lugares"]["restaurantes"];       
 
+        //insert lugares ocio
+        foreach($json_ocio as $value){
+            $nombre_ocio = $value["Nombre"];
+            $referencia_ocio = $value["Referencia"];
+
+            $query_comprobacion_ocio =mysqli_query($dbconnect,"SELECT Nombre FROM ocios WHERE (idMunicipio = '$idMunicipio') AND 
+                (Nombre = '$nombre_ocio')");
+            $row_nombre_ocio = mysqli_fetch_assoc($query_comprobacion_ocio);
+            $nombre_select = $row_nombre_ocio['Nombre'];
+            
+            if($nombre_select == $nombre_ocio){
+                $query_update =mysqli_query($dbconnect,"UPDATE ocios SET Referencia = '$referencia_ocio' WHERE (idMunicipio = '$idMunicipio') AND 
+                    (Nombre = '$nombre_ocio')");
+                echo "Datos ocio actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO ocios (idMunicipio,Nombre,Referencia)
+                    VALUES ('$idMunicipio', '$nombre_ocio','$referencia_ocio')");
+                echo "Nuevos datos ocio - ";
+            }
+        }
+
+        //insert lugares hoteles
+        foreach($json_hoteles as $value){
+            $municipio_hoteles = $value["Municipio"];
+            $nombre_hoteles = $value["Nombre"];
+            $descripcion_hoteles = $value["Descripcion"];
+            $referencia_hoteles = $value["Referencia"];
+            echo "Datos hoteles";
+            echo "-------------";
+        }
+
+        //insert lugares restaurantes
+        foreach($json_restaurantes as $value){
+            $municipio_restaurantes = $value["Municipio"];
+            $nombre_restaurantes = $value["Nombre"];
+            $descripcion_restaurantes = $value["Detalles"];
+            $referencia_restaurantes = $value["Referencia"];
+            echo "Datos restaurantes";
+            echo "-------------";
+        }
 
 
     }
@@ -179,7 +221,7 @@ class Controller extends BaseController
         //insert de los sitios
         $this->insert_localizaciones_TripAd($result, $vArg, $idMunicipio, $dbconnect);
 
-        //insert de los comentarios
+        //manejo de los comentarios
         
 
         //echo $result;
