@@ -29,7 +29,7 @@ class Controller extends BaseController
 
     public function scraperTiempo(){
         $vArg = "tres cantos";
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($vArg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
@@ -37,7 +37,8 @@ class Controller extends BaseController
         echo $result;
         //echo "-------------";
         //$fecha_carbon = Carbon::now();
-        $fecha_carbon = new Carbon("yesterday");      
+        $fecha_carbon = new Carbon("yesterday");
+          
         //echo "-------------";
         $result = json_decode($result,true);
         //echo gettype($result);
@@ -48,6 +49,14 @@ class Controller extends BaseController
         //$id=24930;
         foreach($result as $value){
             $fecha_carbon = $fecha_carbon->addDays(1);
+            $fecha_carbon_formateada = $fecha_carbon->format('Y-m-d');
+
+            //echo "-------------";
+            //echo $fecha_carbon;
+            //echo "-------------";
+            //echo $fecha_carbon_formateada;
+            //echo "-------------";
+
             
             $idMunicipio=$value["idMunicipio"];
             $Nombre=$value["Nombre"];
@@ -59,18 +68,19 @@ class Controller extends BaseController
             $Presion=$value["Presion"];
             $Viento=$value["Viento"];
 
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
             $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
             $fecha_select = $row_select_fecha['Fecha'];
-            if($fecha_select == $fecha_carbon ){
+            
+            if($fecha_select == $fecha_carbon_formateada){
                 $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
-                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
-                //echo "Datos actualizados - ";
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+                echo "Datos actualizados - ";
             }
             else{
                 $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
                     VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
-                //echo "Nuevos datos - ";
+                echo "Nuevos datos - ";
             }
             
             
@@ -85,7 +95,7 @@ class Controller extends BaseController
         }*/
     public function scraperTiempo2(Request $request){
         $arg = $request->input('name');
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->getconection();
         //echo gettype($result);
@@ -102,6 +112,7 @@ class Controller extends BaseController
         //$id=24930;
         foreach($result as $value){
             $fecha_carbon = $fecha_carbon->addDays(1);
+            $fecha_carbon_formateada = $fecha_carbon->format('Y-m-d');
 
             $idMunicipio=$value["idMunicipio"];
             $Nombre=$value["Nombre"];
@@ -113,12 +124,12 @@ class Controller extends BaseController
             $Presion=$value["Presion"];
             $Viento=$value["Viento"];
             
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon')");
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
             $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
             $fecha_select = $row_select_fecha['Fecha'];
-            if($fecha_select == $Fecha_carbon ){
+            if($fecha_select == $fecha_carbon_formateada ){
                 $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
-                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$Fecha_carbon')");
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
                 //echo "Datos actualizados - ";
             }
             else{
@@ -136,13 +147,41 @@ class Controller extends BaseController
         return response()->json($result);
     }
 
-    public function scraperTripAdyComms()
-    {
+
+    public function insert_localizaciones_TripAd($result, $vArg, $idMunicipio, $dbconnect){
+        echo "-------------";
+        echo $idMunicipio;
+        echo "-------------";
+
+
+
+    }
+
+
+    public function scraperTripAdyComms(){
         $vArg = "tres cantos";
         set_time_limit (5000);
-        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe  C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
+        $result = json_decode($result,true);
+
+        //connect a bbdd
+        $dbconnect=$this->getconection();
+        
+        //get id del municipio
+        $Municipio = $result["lugares"]["ocio"][0]["Municipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$Municipio'");
+        $row = mysqli_fetch_assoc($query);
+        $idMunicipio = $row['id'];
+
+        
+        //insert de los sitios
+        $this->insert_localizaciones_TripAd($result, $vArg, $idMunicipio, $dbconnect);
+
+        //insert de los comentarios
+        
+
         //echo $result;
         return $result;
     }
