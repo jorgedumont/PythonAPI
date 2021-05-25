@@ -167,36 +167,60 @@ class Controller extends BaseController
             if($nombre_select == $nombre_ocio){
                 $query_update =mysqli_query($dbconnect,"UPDATE ocios SET Referencia = '$referencia_ocio' WHERE (idMunicipio = '$idMunicipio') AND 
                     (Nombre = '$nombre_ocio')");
-                echo "Datos ocio actualizados - ";
+                //echo "Datos ocio actualizados - ";
             }
             else{
                 $query2 = mysqli_query($dbconnect,"INSERT INTO ocios (idMunicipio,Nombre,Referencia)
                     VALUES ('$idMunicipio', '$nombre_ocio','$referencia_ocio')");
-                echo "Nuevos datos ocio - ";
+                //echo "Nuevos datos ocio - ";
             }
         }
 
         //insert lugares hoteles
         foreach($json_hoteles as $value){
-            $municipio_hoteles = $value["Municipio"];
             $nombre_hoteles = $value["Nombre"];
             $descripcion_hoteles = $value["Descripcion"];
             $referencia_hoteles = $value["Referencia"];
-            echo "Datos hoteles";
-            echo "-------------";
+            
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hoteles WHERE (idMunicipio = '$idMunicipio') AND 
+                (Nombre = '$nombre_hoteles')");
+            $row_nombre = mysqli_fetch_assoc($query_comprobacion);
+            $nombre_select = $row_nombre['Nombre'];
+            
+            if($nombre_select == $nombre_hoteles){
+                $query_update =mysqli_query($dbconnect,"UPDATE hoteles SET Descripcion = '$descripcion_hoteles' , Referencia = '$referencia_hoteles' 
+                    WHERE (idMunicipio = '$idMunicipio') AND (Nombre = '$nombre_hoteles')");
+                //echo "Datos hoteles actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO hoteles (idMunicipio,Nombre,Descripcion,Referencia)
+                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$referencia_hoteles')");
+                //echo "Nuevos datos hoteles - ";
+            }
         }
 
         //insert lugares restaurantes
         foreach($json_restaurantes as $value){
-            $municipio_restaurantes = $value["Municipio"];
             $nombre_restaurantes = $value["Nombre"];
             $descripcion_restaurantes = $value["Detalles"];
             $referencia_restaurantes = $value["Referencia"];
-            echo "Datos restaurantes";
-            echo "-------------";
+            
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM restaurantes WHERE (idMunicipio = '$idMunicipio') AND 
+                (Nombre = '$nombre_restaurantes')");
+            $row_nombre = mysqli_fetch_assoc($query_comprobacion);
+            $nombre_select = $row_nombre['Nombre'];
+            
+            if($nombre_select == $nombre_restaurantes){
+                $query_update =mysqli_query($dbconnect,"UPDATE restaurantes SET Detalles = '$descripcion_restaurantes' , Referencia = '$referencia_restaurantes' 
+                    WHERE (idMunicipio = '$idMunicipio') AND (Nombre = '$nombre_restaurantes')");
+                //echo "Datos restaurantes actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO restaurantes (idMunicipio,Nombre,Detalles,Referencia)
+                    VALUES ('$idMunicipio', '$nombre_restaurantes','$descripcion_restaurantes','$referencia_restaurantes')");
+                //echo "Nuevos datos restaurantes - ";
+            }
         }
-
-
     }
 
 
@@ -208,10 +232,8 @@ class Controller extends BaseController
         $result = utf8_encode($result);
         $result = json_decode($result,true);
 
-        //connect a bbdd
         $dbconnect=$this->getconection();
         
-        //get id del municipio
         $Municipio = $result["lugares"]["ocio"][0]["Municipio"];
         $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$Municipio'");
         $row = mysqli_fetch_assoc($query);
@@ -221,10 +243,6 @@ class Controller extends BaseController
         //insert de los sitios
         $this->insert_localizaciones_TripAd($result, $vArg, $idMunicipio, $dbconnect);
 
-        //manejo de los comentarios
-        
-
-        //echo $result;
         return $result;
     }
 
