@@ -14,9 +14,8 @@ def tripAd(vArg):
     
     vOptions = webdriver.ChromeOptions()
     #vOptions.add_argument("--headless")
-
     #Path con el ejecutor del driver
-    vDriverPath = "C:\\Users\\isabe\\Documents\\4º CARRERA\\PC3\\scrappers\\Chrome\\chromedriver.exe"
+    vDriverPath = "C:\\Users\\jdumo\\Downloads\\chromedriver.exe"
     vDriver = webdriver.Chrome(vDriverPath, chrome_options=vOptions)
 
     #Inciar en 2 pantalla
@@ -244,7 +243,7 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
     #print(vJSONRestaurantes)
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos=pd.read_excel("C:\\xampp\\htdocs\\PC3\\PythonAPI\\Datos\\list-mun-2012.xls")
+    nombrespueblos=pd.read_excel("C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"]=nombrespueblos["Municipio"].str.lower()
     nombrespueblos=nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos

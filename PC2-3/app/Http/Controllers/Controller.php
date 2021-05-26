@@ -222,6 +222,16 @@ class Controller extends BaseController
             }
         }
     }
+    public function scraperTripAdyComms2()
+    {
+        $vArg = "tres cantos";
+        set_time_limit (5000);
+        $command = "C:\Users\jdumo\Anaconda3\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAd.py " . escapeshellarg($vArg);
+        $result = exec($command);
+        $result = utf8_encode($result);
+        //echo $result;
+        return $result;
+    }
 
 
     public function scraperTripAdyComms(){
