@@ -46,10 +46,10 @@ def cargarPueblo2(nombrepueblo):
     #print(dfcombinado)
     #header = ["idMunicipio","Nombre", "Fecha", "tMaxima", "tMinima", "tMedia", "Humedad", "Presion", "Viento"]
     print(dfcombinado.to_json(orient='records',lines=False, force_ascii=False))
-    dfcombinado.to_csv("C:\\xampp\\htdocs\\PC3\\PythonAPI"+"\\datatiempo.csv", index=False, encoding='utf-8-sig')
+    #dfcombinado.to_csv("C:\\xampp\\htdocs\\PC3\\PythonAPI"+"\\datatiempo.csv", index=False, encoding='utf-8-sig')
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos = pd.read_excel("C:\\xampp\\htdocs\\PC3\\PythonAPI\\Datos\\list-mun-2012.xls")
+    nombrespueblos = pd.read_excel("C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"] = nombrespueblos["Municipio"].str.lower()
     nombrespueblos = nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
