@@ -40,6 +40,7 @@ class Controller extends BaseController
 
     public function scraperTripAdyComms()
     {
+        //Falta cambiarlo a un input
         $vArg = "tres cantos";
         set_time_limit (5000);
         $vPython = env('PYTHON_PATH');
@@ -48,6 +49,7 @@ class Controller extends BaseController
         $result = exec($command);
         $result = utf8_encode($result);
         //echo $result;
+        //sentimentAnalysis($result);
         return $result;
     }
 
@@ -82,7 +84,7 @@ class Controller extends BaseController
             //print($fecha . " / ");
             array_push($aFechas, $fecha);
         }
-
-        return(array_count_values($aFechas));
+        $aFinal = array_count_values($aFechas);
+        return(array_slice($aFinal, -5));
     }
 }
