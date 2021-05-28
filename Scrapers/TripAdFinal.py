@@ -198,19 +198,23 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
         #Recorremos cada comentario para almacenarlo en el df
         for e in vComentarios:
             vC1 = e.find("q") or e.find("p", {"class":"partial_entry"})
-            vAnalisis = TextBlob(vC1.text).translate(to='en')
-            vAnalisisF = str(vAnalisis.sentiment).replace("Sentiment(polarity=","").replace(" subjectivity=","").replace(")","")
+            vAnalisis = TextBlob(vC1.text)#.translate(to='en')
+            vAnalisis1 = str(vAnalisis.polarity).replace("Sentiment(polarity=","").replace(" subjectivity=","").replace(")","")
+            vAnalisisF = float(vAnalisis1)
             aSentimiento.append(vAnalisisF)
             #print(vAnalisisF)
             #print("------------------------------------------")
             #print(vC1.text)
             #print('########################')
+            #print(vContador)
             vContador+=1
     
     #print(aSentimiento)
-    print(vContador)
+    #print(vContador)
     vAnalisisSentimientoFinal = sum(aSentimiento)/vContador
-    print(vAnalisisSentimientoFinal)
+    #print(vAnalisisSentimientoFinal)
+    vJsonGlobal = {'lugares':vJSON, 'analisis sentimiento':vAnalisisSentimientoFinal}
+    print(json.dumps(vJsonGlobal))
     
 
     
@@ -223,7 +227,7 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = "colmenar viejo"#argv[1]
+vArg = argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
