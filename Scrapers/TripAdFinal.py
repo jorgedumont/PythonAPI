@@ -8,6 +8,7 @@ import time
 import pandas as pd
 from sys import argv
 import json
+from textblob import TextBlob
 
 
 def tripAd(vArg):
@@ -16,7 +17,7 @@ def tripAd(vArg):
     #vOptions.add_argument("--headless")
 
     #Path con el ejecutor del driver
-    vDriverPath = "C:\\Users\\manu1\\Downloads\\chromedriver.exe"
+    vDriverPath = "C:\\Users\\jdumo\\Downloads\\chromedriver.exe"
     vDriver = webdriver.Chrome(vDriverPath, chrome_options=vOptions)
 
     #Inciar en 2 pantalla
@@ -178,10 +179,9 @@ def tripAd(vArg):
 
 def tripAdComentarios(lUrlComentarios, vArg, vJSON):
     vUrl = 'https://www.tripadvisor.es'
-    #Creacion del DataFrame
-    dfComentariosOcio = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
-    dfComentariosHoteles = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
-    dfComentariosRestaurantes = pd.DataFrame(columns=['Municipio', 'Nombre', 'Comentario', 'Referencia'])
+
+    aSentimiento = []
+    vContador = 0
 
     #Recorremos la lista recibida por parametro con las Url con las que se ha trabajado
     for i in lUrlComentarios:
@@ -198,62 +198,38 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
         #Recorremos cada comentario para almacenarlo en el df
         for e in vComentarios:
             vC1 = e.find("q") or e.find("p", {"class":"partial_entry"})
+            vAnalisis = TextBlob(vC1.text)#.translate(to='en')
+            vAnalisis1 = str(vAnalisis.polarity).replace("Sentiment(polarity=","").replace(" subjectivity=","").replace(")","")
+            vAnalisisF = float(vAnalisis1)
+            aSentimiento.append(vAnalisisF)
+            #print(vAnalisisF)
+            #print("------------------------------------------")
             #print(vC1.text)
             #print('########################')
-            if "https://www.tripadvisor.es/Attraction" in vFiltro:
-                dfComentariosOcio = dfComentariosOcio.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-            elif "https://www.tripadvisor.es/Hotel" in vFiltro:
-                dfComentariosHoteles = dfComentariosHoteles.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-            else:
-                dfComentariosRestaurantes = dfComentariosRestaurantes.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-        
-        #Declaramos la paginacion y la recorremos en caso de que exista    
-        vPaginacion = vSoup.find("div", {"class":"pageNumbers"})
-        if vPaginacion != None:
-            vPaginacion = vPaginacion.findAll("a", {"class":"pageNum"})
-            for n in vPaginacion:
-                vUrlCompleta = vUrl+n['href']
-                vPage2 = requests.get(vUrlCompleta)
-                vSoup2 = BeautifulSoup(vPage2.content, 'html.parser')
-                vComentarios1 = vSoup2.findAll("div", {"class":"Dq9MAugU T870kzTX LnVzGwUB"}) or vSoup2.findAll("div", {"class":"_2wrUUKlw _3hFEdNs8"}) or vSoup2.findAll("div", {"class":"review-container"})
-                for e1 in vComentarios1:
-                    vC2 = e1.find("q") or e1.find("p", {"class":"partial_entry"})
-                    #print(vC2.text)
-                    #print('########################')
-                    if "https://www.tripadvisor.es/Attraction" in vFiltro:
-                        dfComentariosOcio = dfComentariosOcio.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-                    elif "https://www.tripadvisor.es/Hotel" in vFiltro:
-                        dfComentariosHoteles = dfComentariosHoteles.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-                    else:
-                        dfComentariosRestaurantes = dfComentariosRestaurantes.append({'Municipio':vArg, 'Nombre':vTitulo.text, 'Comentario':vC1.text, 'Referencia':i}, ignore_index=True)
-        
-        else:
-            print('No hay paginacion disponible')
-                
-        
-        #print('--------------------------')
+            #print(vContador)
+            vContador+=1
     
-    vJSONOcio = dfComentariosOcio.to_json(orient='records', lines=False)
-    vJSONHoteles= dfComentariosHoteles.to_json(orient='records', lines=False)
-    vJSONRestaurantes = dfComentariosRestaurantes.to_json(orient='records', lines=False)
-    vComentariosJSON = {'ocio':json.loads(vJSONOcio), 'hoteles':json.loads(vJSONHoteles), 'restaurantes':json.loads(vJSONRestaurantes)}
-    #print(vJSONOcio)
-    vGlobalJSON = {'lugares':vJSON, 'comentarios':vComentariosJSON} 
+    #print(aSentimiento)
+    #print(vContador)
+    vAnalisisSentimientoFinal = sum(aSentimiento)/vContador
+    #print(vAnalisisSentimientoFinal)
+    vJsonGlobal = {'lugares':vJSON, 'analisis sentimiento':vAnalisisSentimientoFinal}
+    print(json.dumps(vJsonGlobal))
     
-    print(json.dumps(vGlobalJSON))
-    #print(vJSONRestaurantes)
+
+    
+
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos=pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
+    nombrespueblos=pd.read_excel("C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"]=nombrespueblos["Municipio"].str.lower()
     nombrespueblos=nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = "colmenar viejo"#argv[1]
+vArg = argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
     print("Nombre del pueblo no correcto")
-
 
