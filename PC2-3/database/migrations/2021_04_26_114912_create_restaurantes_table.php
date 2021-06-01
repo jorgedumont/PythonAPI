@@ -18,7 +18,6 @@ class CreateRestaurantesTable extends Migration
             $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
             $table->string('Detalles');
-            $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
         });

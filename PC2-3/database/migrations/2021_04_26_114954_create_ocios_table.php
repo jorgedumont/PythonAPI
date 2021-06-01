@@ -17,7 +17,6 @@ class CreateOciosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
-            $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
         });

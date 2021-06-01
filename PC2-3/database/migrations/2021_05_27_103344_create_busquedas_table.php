@@ -17,6 +17,7 @@ class CreateBusquedasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('idMunicipio');
             $table->string("AnalisisSentimiento");
+            $table->tinyInteger("Scraper")->default(0);
             $table->timestamps();
         });
 

@@ -29,7 +29,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
 });
 
-Route::get('buscar.tiempo', 'App\Http\Controllers\Controller@scraperTiempo');
+Route::post('buscar.tiempo', 'App\Http\Controllers\Controller@scraperTiempo');
 
 Route::post('buscar.tiempo2', 'App\Http\Controllers\Controller@scraperTiempo2');
 
@@ -39,4 +39,4 @@ Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadistica
 Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');
 Route::get('estadisticas.fallos', 'App\Http\Controllers\Controller@estadisticasFallos');
 
-Route::get('grafica.fechas', 'App\Http\Controllers\Controller@graficaFechas');
+Route::get('admin', 'App\Http\Controllers\Controller@admin');
