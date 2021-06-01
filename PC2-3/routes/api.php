@@ -33,6 +33,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 Route::post('buscar.tiempo', 'App\Http\Controllers\Controller@scraperTiempo');
 #Route::post('buscar.tiempo', ImportsController::class);
 Route::post('buscar.tripadvisor', 'App\Http\Controllers\Controller@scraperTripAd');
+Route::post('buscar.tripadvisor.lugares', 'App\Http\Controllers\Controller@scraperTripAdyCommsParam');
+
 
 Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadisticasUsuarios');
 Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');

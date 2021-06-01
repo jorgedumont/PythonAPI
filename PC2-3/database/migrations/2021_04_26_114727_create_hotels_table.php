@@ -19,7 +19,6 @@ class CreateHotelsTable extends Migration
             $table->string('Nombre');
             $table->string('Descripcion');
             $table->string('Caracteristicas');
-            $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
         });

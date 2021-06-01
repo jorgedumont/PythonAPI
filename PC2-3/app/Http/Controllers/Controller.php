@@ -32,7 +32,7 @@ class Controller extends BaseController
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');
-        $command = "C:\\Users\\jdumo\\Anaconda3\\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py" . escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->conexionBD();
         //echo gettype($result);
@@ -141,22 +141,39 @@ class Controller extends BaseController
         foreach($json_hoteles as $value){
             $nombre_hoteles = $value["Nombre"];
             $descripcion_hoteles = $value["Descripcion"];
+            $caracteristicas_hoteles = $value["Caracteristicas"];
             $referencia_hoteles = $value["Referencia"];
             
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hoteles WHERE (idMunicipio = '$idMunicipio') AND 
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hotels WHERE (idMunicipio = '$idMunicipio') AND 
                 (Nombre = '$nombre_hoteles')");
             $row_nombre = mysqli_fetch_assoc($query_comprobacion);
             $nombre_select = $row_nombre['Nombre'];
             
             if($nombre_select == $nombre_hoteles){
-                $query_update =mysqli_query($dbconnect,"UPDATE hoteles SET Descripcion = '$descripcion_hoteles' , Referencia = '$referencia_hoteles' 
+                $query_update =mysqli_query($dbconnect,"UPDATE hotels SET Descripcion = '$descripcion_hoteles' ,Caracteristicas = '$caracteristicas_hoteles', Referencia = '$referencia_hoteles' 
                     WHERE (idMunicipio = '$idMunicipio') AND (Nombre = '$nombre_hoteles')");
-                //echo "Datos hoteles actualizados - ";
+                echo "\n";
+                echo "\n";
+                echo "- Datos hoteles actualizados - ";
+                echo "\n";
+                echo "\n";
+                echo "- $nombre_hoteles - ";
+                echo "\n";
+                echo "- $caracteristicas_hoteles - ";
+                echo "\n";
             }
             else{
-                $query2 = mysqli_query($dbconnect,"INSERT INTO hoteles (idMunicipio,Nombre,Descripcion,Referencia)
-                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$referencia_hoteles')");
-                //echo "Nuevos datos hoteles - ";
+                $query2 = mysqli_query($dbconnect,"INSERT INTO hotels (idMunicipio,Nombre,Descripcion,Caracteristicas,Referencia)
+                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$caracteristicas_hoteles','$referencia_hoteles')");
+                echo "\n";
+                echo "\n";
+                echo "- Nuevos datos hoteles - ";
+                echo "\n";
+                echo "\n";
+                echo "- $nombre_hoteles - ";
+                echo "\n";
+                echo "- $caracteristicas_hoteles - ";
+                echo "\n";
             }
         }
 
@@ -184,9 +201,11 @@ class Controller extends BaseController
         }
     }
 
-    public function scraperTripAdyCommsParam($vArg){
+    public function scraperTripAdyCommsParam(Request $request){
+        
+        $vArg = $request->input('name');
         set_time_limit (5000);
-        $command = "C:\\Users\\jdumo\\Anaconda3\\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAdFinal.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe  C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAdFinal.py " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         $result = json_decode($result,true);
@@ -227,7 +246,7 @@ class Controller extends BaseController
             while($filasrestaurantes =mysqli_fetch_assoc($queryrestaurantes)){
                 $restaurantes[]=$filasrestaurantes;
             }
-            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion FROM hoteles h WHERE h.idMunicipio = '$id'");
+            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion FROM hotels h WHERE h.idMunicipio = '$id'");
             while($filashoteles =mysqli_fetch_assoc($queryhoteles)){
                 $hoteles[]=$filashoteles;
             }
