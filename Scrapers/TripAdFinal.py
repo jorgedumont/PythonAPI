@@ -227,8 +227,8 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-#vArg = argv[1]
-vArg = "agulo"    
+vArg = argv[1]
+#vArg = "agulo"    
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
