@@ -141,22 +141,27 @@ class Controller extends BaseController
         foreach($json_hoteles as $value){
             $nombre_hoteles = $value["Nombre"];
             $descripcion_hoteles = $value["Descripcion"];
+            $caracteristicas_hoteles = $value["Caracteristicas"];
+            $caracteristicas_hoteles_formateadas = str_replace("'","",$caracteristicas_hoteles);
             $referencia_hoteles = $value["Referencia"];
             
-            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hoteles WHERE (idMunicipio = '$idMunicipio') AND 
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hotels WHERE (idMunicipio = '$idMunicipio') AND 
                 (Nombre = '$nombre_hoteles')");
             $row_nombre = mysqli_fetch_assoc($query_comprobacion);
             $nombre_select = $row_nombre['Nombre'];
             
             if($nombre_select == $nombre_hoteles){
-                $query_update =mysqli_query($dbconnect,"UPDATE hoteles SET Descripcion = '$descripcion_hoteles' , Referencia = '$referencia_hoteles' 
+                $query_update =mysqli_query($dbconnect,"UPDATE hotels SET Descripcion = '$descripcion_hoteles' ,Caracteristicas = '$caracteristicas_hoteles_formateadas', Referencia = '$referencia_hoteles' 
                     WHERE (idMunicipio = '$idMunicipio') AND (Nombre = '$nombre_hoteles')");
-                //echo "Datos hoteles actualizados - ";
+
+                //echo "- Datos hoteles actualizados - ";
+                
             }
             else{
-                $query2 = mysqli_query($dbconnect,"INSERT INTO hoteles (idMunicipio,Nombre,Descripcion,Referencia)
-                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$referencia_hoteles')");
-                //echo "Nuevos datos hoteles - ";
+                $query2 = mysqli_query($dbconnect,"INSERT INTO hotels (idMunicipio,Nombre,Descripcion,Caracteristicas,Referencia)
+                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$caracteristicas_hoteles_formateadas','$referencia_hoteles')");
+
+                //echo "- Nuevos datos hoteles - ";
             }
         }
 

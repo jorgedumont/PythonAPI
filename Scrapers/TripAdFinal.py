@@ -17,7 +17,7 @@ def tripAd(vArg):
     #vOptions.add_argument("--headless")
 
     #Path con el ejecutor del driver
-    vDriverPath = "C:\\Users\\manu1\\Downloads\\chromedriver.exe"
+    vDriverPath = "C:\Users\jdumo\Downloads\chromedriver.exe"
     vDriver = webdriver.Chrome(vDriverPath, chrome_options=vOptions)
 
     #Inciar en 2 pantalla
@@ -73,7 +73,7 @@ def tripAd(vArg):
     vUbi.click()
 
     WebDriverWait(vDriver, 5)\
-            .until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[2]/div/div/div/div/div/div'))).click()
+            .until(EC.element_to_be_clickable((By.XPATH, '//*[@id="BODY_BLOCK_JQUERY_REFLOW"]/div[3]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[2]/div'))).click()
 
     #Para cambiar la nueva pestaña a la actual y recogerla para trabajar con BS
     vWindow = vDriver.window_handles[-1]
@@ -227,16 +227,14 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
 
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos=pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
+    nombrespueblos=pd.read_excel("C:\Users\jdumo\OneDrive\Escritorio\Proyecto2\Datos\list-mun-2012.xls")
     nombrespueblos["Municipio"]=nombrespueblos["Municipio"].str.lower()
     nombrespueblos=nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = "colmenar viejo"#argv[1]
+vArg = argv[1] #"colmenar viejo"
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
     print("Nombre del pueblo no correcto")
-
-
