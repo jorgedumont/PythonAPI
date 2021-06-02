@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOciosTable extends Migration
+class CreateBusquedasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateOciosTable extends Migration
      */
     public function up()
     {
-        Schema::create('ocios', function (Blueprint $table) {
+        Schema::create('busquedas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idMunicipio');
-            $table->string('Nombre');
-            $table->string('Referencia');
+            $table->string("AnalisisSentimiento");
+            $table->tinyInteger("Scraper")->default(0);
             $table->timestamps();
         });
 
-        Schema::table('ocios', function (Blueprint $table) {
+        Schema::table('busquedas', function (Blueprint $table) {
             $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
@@ -33,6 +33,6 @@ class CreateOciosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ocios');
+        Schema::dropIfExists('busquedas');
     }
 }

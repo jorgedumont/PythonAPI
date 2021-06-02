@@ -1,10 +1,12 @@
-import json
-import pandas as pd
-from sys import argv
-import json
-import requests
-from bs4 import BeautifulSoup
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+vAnalizador = SentimentIntensityAnalyzer()
+
+vFrase = "Hola buenas tardes"
+
+print(vAnalizador.polarity_scores(vFrase))
+
+'''
 lURL = ['https://www.tripadvisor.es/Attraction_Review-g562662-d10021149-Reviews-Burrolandia-Tres_Cantos.html', 'https://www.tripadvisor.es/Attraction_Review-g562662-d4232311-Reviews-Castillo_de_Soto_de_Vinuelas-Tres_Cantos.html', 'https://www.tripadvisor.es/Attraction_Review-g562662-d8134852-Reviews-Parque_Central-Tres_Cantos.html', 
 'https://www.tripadvisor.es/Attraction_Review-g562662-d4232303-Reviews-Casa_de_la_Cultura-Tres_Cantos.html', 'https://www.tripadvisor.es/Attraction_Review-g562662-d4232327-Reviews-Torre_del_Parque_Central-Tres_Cantos.html', 'https://www.tripadvisor.es/Attraction_Review-g562662-d12257045-Reviews-Noname_Sport-Tres_Cantos.html', 
 'https://www.tripadvisor.es/Hotel_Review-g562662-d234295-Reviews-VP_Jardin_de_Tres_Cantos-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562662-d11737621-Reviews-Eurostars_Madrid_Foro-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562662-d229440-Reviews-Ramada_by_Wyndham_Madrid_Tres_Cantos-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562662-d319668-Reviews-Exe_Tres_Cantos-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562662-d20404555-Reviews-UrbanA_Tres_Cantos-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562662-d4437556-Reviews-Hostal_Tres_Cantos-Tres_Cantos.html', 'https://www.tripadvisor.es/Hotel_Review-g562660-d565272-Reviews-Globales_de_los_Reyes-San_Sebastian_de_los_Reyes.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d2724132-Reviews-Casa_Emeterio-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d2315133-Reviews-La_Terraza_De_Alba-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d8640014-Reviews-La_Bocatoma_Sabor_Venezolano-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d16211176-Reviews-Nawab_Indian_Cuisine-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d10457839-Reviews-Casa_Loren-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d4187836-Reviews-La_Churrasquita-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d4877525-Reviews-La_sarten_restaurante-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d4971947-Reviews-Pasteleria_Artesanal_Manolo-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d8779721-Reviews-Shoopo_HomeBar-Tres_Cantos.html', 'https://www.tripadvisor.es/Restaurant_Review-g562662-d4216769-Reviews-Mary_Carmen-Tres_Cantos.html']
@@ -79,4 +81,4 @@ def tripAdComentarios(lUrlComentarios, vArg):
     #print(vJSONRestaurantes)
 
 tripAdComentarios(lURL, vArg)
-
+'''

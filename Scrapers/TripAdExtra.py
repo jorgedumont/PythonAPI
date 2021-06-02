@@ -10,6 +10,7 @@ from sys import argv
 import json
 
 
+
 def tripAd(vArg):
     
     vOptions = webdriver.ChromeOptions()
