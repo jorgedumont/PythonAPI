@@ -227,7 +227,7 @@ class Controller extends BaseController
             while($filasrestaurantes =mysqli_fetch_assoc($queryrestaurantes)){
                 $restaurantes[]=$filasrestaurantes;
             }
-            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion FROM hoteles h WHERE h.idMunicipio = '$id'");
+            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion, Caracteristicas FROM hotels h WHERE h.idMunicipio = '$id'");
             while($filashoteles =mysqli_fetch_assoc($queryhoteles)){
                 $hoteles[]=$filashoteles;
             }
