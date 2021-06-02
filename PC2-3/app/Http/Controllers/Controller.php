@@ -32,7 +32,7 @@ class Controller extends BaseController
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');
-        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py" . escapeshellarg($arg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->conexionBD();
         //echo gettype($result);
@@ -189,11 +189,9 @@ class Controller extends BaseController
         }
     }
 
-    public function scraperTripAdyCommsParam(Request $request){
-        
-        $vArg = $request->input('name');
+    public function scraperTripAdyCommsParam($vArg){
         set_time_limit (5000);
-        $command = "C:\Users\isabe\Anaconda3\python.exe  C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAdFinal.py " . escapeshellarg($vArg);
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\TripAdFinal.py " . escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         $result = json_decode($result,true);
@@ -218,12 +216,12 @@ class Controller extends BaseController
         $queryid = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
         $filaid = mysqli_fetch_assoc($queryid);
         $id = $filaid['id'];
-        $querysentimiento = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas WHERE created_at between DATE_ADD(now(),INTERVAL -7 DAY) and now() and idMunicipio = '$id'");
+        $querysentimiento = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas WHERE created_at between DATE_ADD(now(),INTERVAL -7 DAY) and now() and idMunicipio = '$id' and Scraper =1");
         if ($querysentimiento -> num_rows==0){
            $resultado = $this->scraperTripAdyCommsParam($vArg); 
            $sentimiento = $resultado["analisis sentimiento"];
-           $queryinsertsentimiento = mysqli_query($dbconnect,"INSERT INTO busquedas (idMunicipio,AnalisisSentimiento,created_at,updated_at)
-                    VALUES ('$id', '$sentimiento',now(),now())");    
+           $queryinsertsentimiento = mysqli_query($dbconnect,"INSERT INTO busquedas (idMunicipio,AnalisisSentimiento,created_at,updated_at,Scraper)
+                    VALUES ('$id', '$sentimiento',now(),now(),'1')");    
         }else{
             $filasentimiento = mysqli_fetch_assoc($querysentimiento);
             $queryocio = mysqli_query($dbconnect,"SELECT Nombre FROM ocios o WHERE o.idMunicipio = '$id'");
@@ -234,16 +232,51 @@ class Controller extends BaseController
             while($filasrestaurantes =mysqli_fetch_assoc($queryrestaurantes)){
                 $restaurantes[]=$filasrestaurantes;
             }
-            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion FROM hotels h WHERE h.idMunicipio = '$id'");
+            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion, Caracteristicas FROM hotels h WHERE h.idMunicipio = '$id'");
             while($filashoteles =mysqli_fetch_assoc($queryhoteles)){
                 $hoteles[]=$filashoteles;
             }
-            $querysentimientonuevo = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas b WHERE b.idMunicipio = '$id'");
+            $querysentimientonuevo = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas b WHERE b.idMunicipio = '$id' LIMIT 1");
             while($filassentimiento =mysqli_fetch_assoc($querysentimientonuevo)){
                 $sentimiento[]=$filassentimiento;
+                $analisissentimiento=$filassentimiento['AnalisisSentimiento'];
+                $queryinsertarsentimiento = mysqli_query($dbconnect,"INSERT INTO busquedas (idMunicipio,AnalisisSentimiento,created_at,updated_at,Scraper)
+                VALUES ('$id', '$analisissentimiento',now(),now(),'0')");
             }
+            
             $resultado=array_merge($ocio,$restaurantes,$hoteles,$sentimiento);
         }
         return $resultado;
+    }
+
+    public function busquedasRecientes(){
+        $dbconnect=$this->conexionBD();
+        $querybusquedareciente = mysqli_query($dbconnect,"SELECT idMunicipio FROM busquedas ORDER BY id DESC LIMIT 5");
+        while($filabusqueda = mysqli_fetch_assoc($querybusquedareciente)){
+            $resultadobusqueda[]=$filabusqueda;
+        }
+        foreach($resultadobusqueda as $busqueda){
+            $busquedanombre = $busqueda['idMunicipio'];
+            $querynombrepueblo = mysqli_query($dbconnect,"SELECT Nombre FROM municipios WHERE id = '$busquedanombre'");
+                $resultadonombres[]=$filanombre;
+            }
+        }
+        return $resultadonombres;
+    }
+
+    public function busquedasPopulares(){
+        $dbconnect=$this->conexionBD();
+        $querybusquedareciente = mysqli_query($dbconnect,"SELECT idMunicipio, COUNT(idMunicipio) FROM busquedas GROUP BY idMunicipio ORDER BY COUNT(*) DESC LIMIT 5");
+        while($filabusqueda = mysqli_fetch_assoc($querybusquedareciente)){
+            $resultadobusqueda[]=$filabusqueda;
+        }
+        foreach($resultadobusqueda as $busqueda){
+            $busquedanombre = $busqueda['idMunicipio'];
+            $querynombrepueblo = mysqli_query($dbconnect,"SELECT Nombre FROM municipios WHERE id = '$busquedanombre'");
+            while($filanombre = mysqli_fetch_assoc($querynombrepueblo)){
+                $resultadonombres[]=$filanombre;
+            }
+        }
+        return $resultadonombres;
     }
 }
