@@ -31,11 +31,12 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
 
 Route::post('buscar.tiempo', 'App\Http\Controllers\Controller@scraperTiempo');
-#Route::post('buscar.tiempo', ImportsController::class);
 Route::post('buscar.tripadvisor', 'App\Http\Controllers\Controller@scraperTripAd');
+
+Route::get('busquedas.recientes', 'App\Http\Controllers\Controller@busquedasRecientes');
+Route::get('busquedas.populares', 'App\Http\Controllers\Controller@busquedasPopulares');
 
 Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadisticasUsuarios');
 Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');
 Route::get('estadisticas.fallos', 'App\Http\Controllers\Controller@estadisticasFallos');
-
 Route::get('grafica.fechas', 'App\Http\Controllers\Controller@graficaFechas');
