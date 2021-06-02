@@ -258,6 +258,7 @@ class Controller extends BaseController
         foreach($resultadobusqueda as $busqueda){
             $busquedanombre = $busqueda['idMunicipio'];
             $querynombrepueblo = mysqli_query($dbconnect,"SELECT Nombre FROM municipios WHERE id = '$busquedanombre'");
+            while($filanombre = mysqli_fetch_assoc($querynombrepueblo)){
                 $resultadonombres[]=$filanombre;
             }
         }
