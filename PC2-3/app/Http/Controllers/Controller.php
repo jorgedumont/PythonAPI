@@ -15,10 +15,10 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function conexionBD(){
-        $hostname = "2.139.176.212";
-        $username = "pr_grupoa";
-        $password = "pr_grupoa";
-        $db = "prgrupoa";
+        $hostname = env('DB_HOST');
+        $username = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+        $db = env('DB_DATABASE');
         $dbconnect=mysqli_connect($hostname,$username,$password,$db);
 
         if ($dbconnect->connect_error) {
@@ -32,7 +32,9 @@ class Controller extends BaseController
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');
-        $command = "C:\\Users\\jdumo\\Anaconda3\\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH');
+        $command =  $vPython." ".$vScript." ".escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->conexionBD();
         //echo gettype($result);
@@ -190,8 +192,9 @@ class Controller extends BaseController
     }
 
     public function scraperTripAdyCommsParam($vArg){
-        set_time_limit (5000);
-        $command = "C:\\Users\\jdumo\\Anaconda3\\python.exe C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Scrapers\\TripAdFinal.py " . escapeshellarg($vArg);
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TRIPADVISOR_SCRIPT_PATH');
+        $command =  $vPython." ".$vScript." ".escapeshellarg($vArg);
         $result = exec($command);
         $result = utf8_encode($result);
         $result = json_decode($result,true);
