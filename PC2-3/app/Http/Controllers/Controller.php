@@ -142,6 +142,7 @@ class Controller extends BaseController
             $nombre_hoteles = $value["Nombre"];
             $descripcion_hoteles = $value["Descripcion"];
             $caracteristicas_hoteles = $value["Caracteristicas"];
+            $caracteristicas_hoteles_formateadas = str_replace("'","",$caracteristicas_hoteles);
             $referencia_hoteles = $value["Referencia"];
             
             $query_comprobacion =mysqli_query($dbconnect,"SELECT Nombre FROM hotels WHERE (idMunicipio = '$idMunicipio') AND 
@@ -150,30 +151,17 @@ class Controller extends BaseController
             $nombre_select = $row_nombre['Nombre'];
             
             if($nombre_select == $nombre_hoteles){
-                $query_update =mysqli_query($dbconnect,"UPDATE hotels SET Descripcion = '$descripcion_hoteles' ,Caracteristicas = '$caracteristicas_hoteles', Referencia = '$referencia_hoteles' 
+                $query_update =mysqli_query($dbconnect,"UPDATE hotels SET Descripcion = '$descripcion_hoteles' ,Caracteristicas = '$caracteristicas_hoteles_formateadas', Referencia = '$referencia_hoteles' 
                     WHERE (idMunicipio = '$idMunicipio') AND (Nombre = '$nombre_hoteles')");
-                echo "\n";
-                echo "\n";
-                echo "- Datos hoteles actualizados - ";
-                echo "\n";
-                echo "\n";
-                echo "- $nombre_hoteles - ";
-                echo "\n";
-                echo "- $caracteristicas_hoteles - ";
-                echo "\n";
+
+                //echo "- Datos hoteles actualizados - ";
+                
             }
             else{
                 $query2 = mysqli_query($dbconnect,"INSERT INTO hotels (idMunicipio,Nombre,Descripcion,Caracteristicas,Referencia)
-                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$caracteristicas_hoteles','$referencia_hoteles')");
-                echo "\n";
-                echo "\n";
-                echo "- Nuevos datos hoteles - ";
-                echo "\n";
-                echo "\n";
-                echo "- $nombre_hoteles - ";
-                echo "\n";
-                echo "- $caracteristicas_hoteles - ";
-                echo "\n";
+                    VALUES ('$idMunicipio', '$nombre_hoteles','$descripcion_hoteles','$caracteristicas_hoteles_formateadas','$referencia_hoteles')");
+
+                //echo "- Nuevos datos hoteles - ";
             }
         }
 

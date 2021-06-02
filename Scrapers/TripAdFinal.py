@@ -73,7 +73,7 @@ def tripAd(vArg):
     vUbi.click()
 
     WebDriverWait(vDriver, 5)\
-            .until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[2]/div/div/div/div/div/div'))).click()
+            .until(EC.element_to_be_clickable((By.XPATH, '//*[@id="BODY_BLOCK_JQUERY_REFLOW"]/div[3]/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/div[3]/div/div[1]/div/div[2]/div'))).click()
 
     #Para cambiar la nueva pestaña a la actual y recogerla para trabajar con BS
     vWindow = vDriver.window_handles[-1]
@@ -198,10 +198,12 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
         #Recorremos cada comentario para almacenarlo en el df
         for e in vComentarios:
             vC1 = e.find("q") or e.find("p", {"class":"partial_entry"})
-            vAnalisis = TextBlob(vC1.text)#.translate(to='en')
-            vAnalisis1 = str(vAnalisis.polarity).replace("Sentiment(polarity=","").replace(" subjectivity=","").replace(")","")
-            vAnalisisF = float(vAnalisis1)
-            aSentimiento.append(vAnalisisF)
+            try: 
+                vAnalisis = TextBlob(vC1.text).translate(to='en')
+            except:
+                vAnalisis = TextBlob(vC1.text)
+            vAnalisis1 = vAnalisis.polarity#).replace("Sentiment(polarity=","").replace(" subjectivity=","").replace(")","")
+            aSentimiento.append(float(vAnalisis1))
             #print(vAnalisisF)
             #print("------------------------------------------")
             #print(vC1.text)
@@ -211,7 +213,11 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
     
     #print(aSentimiento)
     #print(vContador)
-    vAnalisisSentimientoFinal = sum(aSentimiento)/vContador
+    vTotal = sum(aSentimiento)
+    vTotalF = float("%.2f" % vTotal)
+    #print(vTotal)
+    #print(vTotalF)
+    vAnalisisSentimientoFinal = vTotalF/vContador
     #print(vAnalisisSentimientoFinal)
     vJsonGlobal = {'lugares':vJSON, 'analisis sentimiento':vAnalisisSentimientoFinal}
     print(json.dumps(vJsonGlobal))
@@ -227,10 +233,8 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = argv[1]
-#vArg = "agulo"    
+vArg = argv[1] #"colmenar viejo"
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
     print("Nombre del pueblo no correcto")
-
