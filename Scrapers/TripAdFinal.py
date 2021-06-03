@@ -234,7 +234,7 @@ def comprobarPueblo(nombrepueblo):
 
 #print('¿Que localidad estas buscando?')
 #argv[1]
-vArg ="colmenar viejo"
+vArg =argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:

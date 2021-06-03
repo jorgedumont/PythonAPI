@@ -192,6 +192,7 @@ class Controller extends BaseController
     }
 
     public function scraperTripAdyCommsParam($vArg){
+        set_time_limit (5000);
         $vPython = env('PYTHON_PATH');
         $vScript = env('TRIPADVISOR_SCRIPT_PATH');
         $command =  $vPython." ".$vScript." ".escapeshellarg($vArg);
