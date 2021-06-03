@@ -18,7 +18,7 @@ def tripAd(vArg):
 
     #Path con el ejecutor del driver
     vDriverPath = "C:\\Users\\jdumo\\Downloads\\chromedriver.exe"
-    vDriver = webdriver.Chrome(vDriverPath, chrome_options=vOptions)
+    vDriver = webdriver.Chrome(vDriverPath, options=vOptions)
 
     #Inciar en 2 pantalla
     vDriver.set_window_position(2000, 0)
@@ -233,7 +233,8 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-vArg = argv[1] #"colmenar viejo"
+#argv[1]
+vArg ="colmenar viejo"
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
