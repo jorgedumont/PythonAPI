@@ -220,7 +220,7 @@ class Controller extends BaseController
         return $result;
     }
 
-    public function scraperTripAd(Request $request){
+    public function scraperTripAdUsers(Request $request){
         $vArg = $request->input('name');
         $dbconnect=$this->conexionBD();
         $queryid = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
@@ -234,15 +234,15 @@ class Controller extends BaseController
                     VALUES ('$id', '$sentimiento',now(),now(),'1')");    
         }else{
             $filasentimiento = mysqli_fetch_assoc($querysentimiento);
-            $queryocio = mysqli_query($dbconnect,"SELECT Nombre FROM ocios o WHERE o.idMunicipio = '$id'");
+            $queryocio = mysqli_query($dbconnect,"SELECT Nombre FROM ocios o WHERE o.idMunicipio = '$id' LIMIT 5");
             while($filasocio =mysqli_fetch_assoc($queryocio)){
                 $ocio[]=$filasocio;
             }
-            $queryrestaurantes = mysqli_query($dbconnect,"SELECT Nombre, Detalles FROM restaurantes r WHERE r.idMunicipio = '$id'");
+            $queryrestaurantes = mysqli_query($dbconnect,"SELECT Nombre, Detalles FROM restaurantes r WHERE r.idMunicipio = '$id' LIMIT 5");
             while($filasrestaurantes =mysqli_fetch_assoc($queryrestaurantes)){
                 $restaurantes[]=$filasrestaurantes;
             }
-            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion, Caracteristicas FROM hotels h WHERE h.idMunicipio = '$id'");
+            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion, Caracteristicas FROM hotels h WHERE h.idMunicipio = '$id' LIMIT 5");
             while($filashoteles =mysqli_fetch_assoc($queryhoteles)){
                 $hoteles[]=$filashoteles;
             }
@@ -252,6 +252,40 @@ class Controller extends BaseController
                 $analisissentimiento=$filassentimiento['AnalisisSentimiento'];
                 $queryinsertarsentimiento = mysqli_query($dbconnect,"INSERT INTO busquedas (idMunicipio,AnalisisSentimiento,created_at,updated_at,Scraper)
                 VALUES ('$id', '$analisissentimiento',now(),now(),'0')");
+            }
+            
+            $resultado=array_merge($ocio,$restaurantes,$hoteles,$sentimiento);
+        }
+        return $resultado;
+    }
+
+    public function scraperTripAd(Request $request){
+        $vArg = $request->input('name');
+        $dbconnect=$this->conexionBD();
+        $queryid = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
+        $filaid = mysqli_fetch_assoc($queryid);
+        $id = $filaid['id'];
+        $querysentimiento = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas WHERE created_at between DATE_ADD(now(),INTERVAL -7 DAY) and now() and idMunicipio = '$id' and Scraper =1");
+        if ($querysentimiento -> num_rows==0){
+           $resultado = $this->scraperTripAdyCommsParam($vArg);    
+        }else{
+            $filasentimiento = mysqli_fetch_assoc($querysentimiento);
+            $queryocio = mysqli_query($dbconnect,"SELECT Nombre FROM ocios o WHERE o.idMunicipio = '$id' LIMIT 3");
+            while($filasocio =mysqli_fetch_assoc($queryocio)){
+                $ocio[]=$filasocio;
+            }
+            $queryrestaurantes = mysqli_query($dbconnect,"SELECT Nombre, Detalles FROM restaurantes r WHERE r.idMunicipio = '$id' LIMIT 3");
+            while($filasrestaurantes =mysqli_fetch_assoc($queryrestaurantes)){
+                $restaurantes[]=$filasrestaurantes;
+            }
+            $queryhoteles = mysqli_query($dbconnect,"SELECT Nombre, Descripcion, Caracteristicas FROM hotels h WHERE h.idMunicipio = '$id' LIMIT 3");
+            while($filashoteles =mysqli_fetch_assoc($queryhoteles)){
+                $hoteles[]=$filashoteles;
+            }
+            $querysentimientonuevo = mysqli_query($dbconnect,"SELECT AnalisisSentimiento FROM busquedas b WHERE b.idMunicipio = '$id' LIMIT 1");
+            while($filassentimiento =mysqli_fetch_assoc($querysentimientonuevo)){
+                $sentimiento[]=$filassentimiento;
+                $analisissentimiento=$filassentimiento['AnalisisSentimiento'];
             }
             
             $resultado=array_merge($ocio,$restaurantes,$hoteles,$sentimiento);
