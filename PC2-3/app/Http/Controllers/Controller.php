@@ -75,7 +75,13 @@ class Controller extends BaseController
                 //echo "Nuevos datos - ";
             }
         }
-        return response()->json($result);
+        
+        $querytiempo = mysqli_query($dbconnect,"SELECT * FROM climas where idMunicipio='7005' ORDER BY id DESC LIMIT 7");
+            while($filatiempo = mysqli_fetch_assoc($querytiempo)){
+                $resultadotiempo[]=$filatiempo;
+            }
+
+        return response()->json($resultadotiempo);
     }
 
     public function estadisticasUsuarios()
@@ -277,11 +283,14 @@ class Controller extends BaseController
         }
         foreach($resultadobusqueda as $busqueda){
             $busquedanombre = $busqueda['idMunicipio'];
+            $busquedanumero = $busqueda['COUNT(idMunicipio)'];
             $querynombrepueblo = mysqli_query($dbconnect,"SELECT Nombre FROM municipios WHERE id = '$busquedanombre'");
             while($filanombre = mysqli_fetch_assoc($querynombrepueblo)){
-                $resultadonombres[]=$filanombre;
+                $nombre=$filanombre['Nombre'];
+                $resultadonombres[]=$nombre;
+                array_push($resultadonombres,$busquedanumero);
             }
         }
-        return $resultadonombres;
+        return response()->json($resultadonombres);
     }
 }

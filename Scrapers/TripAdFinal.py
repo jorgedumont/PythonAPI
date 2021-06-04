@@ -219,7 +219,8 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
     #print(vTotalF)
     vAnalisisSentimientoFinal = vTotalF/vContador
     #print(vAnalisisSentimientoFinal)
-    vJsonGlobal = {'lugares':vJSON, 'analisis sentimiento':vAnalisisSentimientoFinal}
+    vAnalisisSentimientoFinalF = float("%.2f" % vAnalisisSentimientoFinal)
+    vJsonGlobal = {'lugares':vJSON, 'analisis sentimiento':vAnalisisSentimientoFinalF}
     print(json.dumps(vJsonGlobal))
     
 
