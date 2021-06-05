@@ -41,3 +41,8 @@ Route::get('estadisticas.usuarios', 'App\Http\Controllers\Controller@estadistica
 Route::get('estadisticas.sesiones', 'App\Http\Controllers\Controller@estadisticasSesiones');
 Route::get('estadisticas.fallos', 'App\Http\Controllers\Controller@estadisticasFallos');
 Route::get('grafica.fechas', 'App\Http\Controllers\Controller@graficaFechas');
+
+Route::post('total.ocio', 'App\Http\Controllers\Controller@TotalOcio');
+Route::post('total.restaurantes', 'App\Http\Controllers\Controller@TotalRestaurantes');
+Route::post('total.hoteles', 'App\Http\Controllers\Controller@TotalHoteles');
+Route::post('nombre.pueblo', 'App\Http\Controllers\Controller@NombrePueblo');

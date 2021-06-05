@@ -327,4 +327,43 @@ class Controller extends BaseController
         }
         return response()->json($resultadonombres);
     }
+
+    public function TotalOcio(Request $request){
+        $vArg = $request->input('name');
+        $dbconnect=$this->conexionBD();
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        $querybusquedaociototal = mysqli_query($dbconnect,"SELECT COUNT(Nombre) FROM ocios WHERE idMunicipio='$id'");
+        $filabusqueda = mysqli_fetch_assoc($querybusquedaociototal);
+        $totalocio = $filabusqueda['COUNT(Nombre)'];
+        return $totalocio;
+    }
+    public function TotalRestaurantes(Request $request){
+        $vArg = $request->input('name');
+        $dbconnect=$this->conexionBD();
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        $querybusquedaociototal = mysqli_query($dbconnect,"SELECT COUNT(Nombre) FROM restaurantes WHERE idMunicipio='$id'");
+        $filabusqueda = mysqli_fetch_assoc($querybusquedaociototal);
+        $totalocio = $filabusqueda['COUNT(Nombre)'];
+        return $totalocio;
+    }
+    public function TotalHoteles(Request $request){
+        $vArg = $request->input('name');
+        $dbconnect=$this->conexionBD();
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$vArg'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        $querybusquedaociototal = mysqli_query($dbconnect,"SELECT COUNT(Nombre) FROM hotels WHERE idMunicipio='$id'");
+        $filabusqueda = mysqli_fetch_assoc($querybusquedaociototal);
+        $totalocio = $filabusqueda['COUNT(Nombre)'];
+        return $totalocio;
+    }
+
+    public function NombrePueblo(Request $request){
+        $vArg = $request->input('name');
+        return $vArg;
+    }
 }
