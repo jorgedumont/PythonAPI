@@ -15,14 +15,14 @@ class CreateOciosTable extends Migration
     {
         Schema::create('ocios', function (Blueprint $table) {
             $table->id();
-            $table->integer('idMunicipio');
-
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
-
+            $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
-            $table->string('Comentario');
             $table->string('Referencia');
             $table->timestamps();
+        });
+
+        Schema::table('ocios', function (Blueprint $table) {
+            $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
 

@@ -15,19 +15,20 @@ class CreateClimasTable extends Migration
     {
         Schema::create('climas', function (Blueprint $table) {
             $table->id();
-            $table->string('idMunicipio');
-
-            //$table->foreign('idMunicipio')->references('id')->on('municipios');
-
+            $table->unsignedBigInteger('idMunicipio');
             $table->string('Nombre');
             $table->date('Fecha');
             $table->integer('tMaxima');
-            $table->integer('tMainima');
+            $table->integer('tMinima');
             $table->double('tMedia');
             $table->integer('Humedad');
             $table->integer('Presion');
             $table->integer('Viento');
             $table->timestamps();
+        });
+
+        Schema::table('climas', function (Blueprint $table) {
+            $table->foreign('idMunicipio')->references('id')->on('municipios');
         });
     }
 
