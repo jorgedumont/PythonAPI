@@ -17,7 +17,7 @@ def tripAd(vArg):
     #vOptions.add_argument("--headless")
 
     #Path con el ejecutor del driver
-    vDriverPath = "C:\\Users\\jdumo\\Downloads\\chromedriver.exe"
+    vDriverPath = "C:\\Users\\manu1\\Downloads\\chromedriver.exe"
     vDriver = webdriver.Chrome(vDriverPath, options=vOptions)
 
     #Inciar en 2 pantalla
@@ -228,14 +228,14 @@ def tripAdComentarios(lUrlComentarios, vArg, vJSON):
 
 
 def comprobarPueblo(nombrepueblo):
-    nombrespueblos=pd.read_excel("C:\\Users\\jdumo\\OneDrive\\Escritorio\\Proyecto2\\Datos\\list-mun-2012.xls")
+    nombrespueblos=pd.read_excel("C:\\Users\\manu1\\GitHub\\PythonAPI\\Datos\\list-mun-2012.xls")
     nombrespueblos["Municipio"]=nombrespueblos["Municipio"].str.lower()
     nombrespueblos=nombrespueblos["Municipio"].tolist()
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
 #argv[1]
-vArg =argv[1]
+vArg = "majadahonda"#argv[1]
 if comprobarPueblo(vArg):
     tripAd(vArg)
 else:
