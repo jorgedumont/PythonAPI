@@ -76,7 +76,7 @@ class Controller extends BaseController
             }
         }
         
-        $querytiempo = mysqli_query($dbconnect,"SELECT * FROM climas where idMunicipio='7005' ORDER BY id DESC LIMIT 7");
+        $querytiempo = mysqli_query($dbconnect,"SELECT * FROM climas where idMunicipio='$id' ORDER BY id DESC LIMIT 7");
             while($filatiempo = mysqli_fetch_assoc($querytiempo)){
                 $resultadotiempo[]=$filatiempo;
             }
