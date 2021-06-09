@@ -84,6 +84,63 @@ class Controller extends BaseController
         return response()->json($resultadotiempo);
     }
 
+    public function scraperTiempoCheckpoint()
+    {
+        $arg='tres cantos';
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH');
+        $command =  $vPython." ".$vScript." ".escapeshellarg($arg);
+        $result = exec($command);
+        $vScript2 = env('TIEMPO_SCRIPT_PATH2');
+        $command2 =  $vPython." ".$vScript2." ".escapeshellarg($arg);
+        $result2 = exec($command2);
+        $dbconnect=$this->conexionBD();
+        //echo gettype($result);
+        //echo $result;
+        $result = utf8_encode($result);
+        $result = json_decode($result,true);
+        $result2 = utf8_encode($result2);
+        $result2 = json_decode($result2,true);
+        $fecha_carbon = new Carbon("yesterday"); 
+        //echo gettype($result);
+        $idMunicipio=$result[0]["idMunicipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        foreach($result2 as $value2){
+            $Fecha=$value2["Fecha"];
+            $idMunicipio=$value2["idMunicipio"];
+            $UV=$value2["UV"];
+            $HumedadyPresion=$value2["HumedadyPresion"];
+                $query2 = mysqli_query($dbconnect,"INSERT INTO tiempocheckpointdumonts (Fecha,idMunicipio,UV,HumedadyPresion)
+                    VALUES ('$fecha_carbon','$id','$UV', '$HumedadyPresion')");
+                //echo "Nuevos datos - ";
+            }
+
+        foreach($result as $value){
+            $idMunicipio=$value["idMunicipio"];
+            $Nombre=$value["Nombre"];
+            $Fecha=$value["Fecha"];
+            $tMaxima=$value["tMaxima"];
+            $tMinima=$value["tMinima"];
+            $tMedia=$value["tMedia"];
+            $Humedad=$value["Humedad"];
+            $Presion=$value["Presion"];
+            $Viento=$value["Viento"];
+            $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
+                VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+        }
+        $query2 = mysqli_query($dbconnect,"SELECT climas.tMaxima, climas.tMinima, tiempocheckpointdumonts.UV, tiempocheckpointdumonts.HumedadyPresion
+        FROM climas
+        INNER JOIN tiempocheckpointdumonts ON climas.idMunicipio=tiempocheckpointdumonts.idMunicipio");
+        while($filatiempo = mysqli_fetch_assoc($query2)){
+            $resultadotiempo[]=$filatiempo;
+        }
+        
+
+        return response()->json($resultadotiempo);
+    }
+
     public function estadisticasUsuarios()
     {
         $usuarios = DB::table('users')->count();
