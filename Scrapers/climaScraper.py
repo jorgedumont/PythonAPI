@@ -9,7 +9,7 @@ def cargarPueblo2(nombrepueblo):
     url = 'https://www.tutiempo.net/' + nombrepueblo + '.html?datos=detallados'
     if url is None:
         return False
-    print(url)
+    #print(url)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     columnas = ["idMunicipio","Nombre", "Fecha", "tMaxima", "tMinima", "tMedia"]
@@ -33,13 +33,17 @@ def cargarPueblo2(nombrepueblo):
     for datos in detalle.find_all("td"):
         datos1 = datos.find_all("span", {"class": "hrd"})
         humedad = datos1[0]
-        print(humedad)
+        #print(humedad)
         humedad = humedad.get_text().replace("%","")
         presion = datos1[1]
         presion = presion.get_text().replace("hPa","")
         viento = datos1[2]
         viento = viento.get_text().replace("km/h","")
-        fila2 = {"Humedad": humedad, "Presion": presion, "Viento": viento}
+        indiceUV = datos1[3].text
+        if(indiceUV == "-"):
+            indiceUV = 0
+        #print(indiceUV)
+        fila2 = {"Humedad": humedad, "Presion": presion, "Viento": viento, "indiceUV": indiceUV}
         df2 = df2.append(fila2, ignore_index=True)
     dfcombinado = pd.concat([df, df2], axis=1)
     #print(dfcombinado)

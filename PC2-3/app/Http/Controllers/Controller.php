@@ -29,6 +29,97 @@ class Controller extends BaseController
     }
 
 
+    public function datosJoinJSON()
+    {
+        $arg = "navalcarnero";
+        $vPython = env('PYTHON_PATH');
+        $vScript1 = env('TIEMPO_SCRIPT_PATH_CHECK');
+        $vScript2 = env('TIEMPO_SCRIPT_PATH');
+        $command1 =  $vPython." ".$vScript1." ".escapeshellarg($arg);
+        $command2 =  $vPython." ".$vScript2." ".escapeshellarg($arg);
+        
+        $result1 = exec($command1);
+        $result1 = utf8_encode($result1);
+        $result1 = json_decode($result1,true);
+
+        $result2 = exec($command2);
+        $result2 = utf8_encode($result2);
+        $result2 = json_decode($result2,true);
+
+        //echo $result1;
+        //echo $result2;
+        $aDatos = array();
+
+        $resultadoFinal = array($result2);
+
+        foreach($result1 as $value){
+            $datoNuevo = $value["indiceUV"];
+            array_push($resultadoFinal, $datoNuevo);
+
+        }
+        
+        
+        return $resultadoFinal;
+    }
+
+    public function scraperClima()
+    {
+        $arg = "navalcarnero";
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH_CHECK');
+        $command =  $vPython." ".$vScript." ".escapeshellarg($arg);
+        $result = exec($command);
+        
+        $dbconnect=$this->conexionBD();
+        //echo gettype($result);
+        //echo $result;
+        $result = utf8_encode($result);
+        $result = json_decode($result,true);
+        $fecha_carbon = new Carbon("yesterday"); 
+        //echo gettype($result);
+        $idMunicipio=$result[0]["idMunicipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        foreach($result as $value){
+            $fecha_carbon = $fecha_carbon->addDays(1);
+            $fecha_carbon_formateada = $fecha_carbon->format('Y-m-d');
+
+            $idMunicipio=$value["idMunicipio"];
+            $Nombre=$value["Nombre"];
+            $Fecha=$value["Fecha"];
+            $tMaxima=$value["tMaxima"];
+            $tMinima=$value["tMinima"];
+            $tMedia=$value["tMedia"];
+            $Humedad=$value["Humedad"];
+            $Presion=$value["Presion"];
+            $Viento=$value["Viento"];
+            $IndiceUV=$value["indiceUV"];
+            
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM tiempos WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+            $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
+            $fecha_select = $row_select_fecha['Fecha'];
+            if($fecha_select == $fecha_carbon_formateada ){
+                $query_update =mysqli_query($dbconnect,"UPDATE tiempos SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+                //echo "Datos actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO tiempos (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento,indiceUV)
+                    VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento','$IndiceUV')");
+                //echo "Nuevos datos - ";
+            }
+        }
+        
+        $querytiempo = mysqli_query($dbconnect,"SELECT * FROM tiempos where idMunicipio='$id' ORDER BY id DESC LIMIT 7");
+            while($filatiempo = mysqli_fetch_assoc($querytiempo)){
+                $resultadotiempo[]=$filatiempo;
+            }
+
+        return response()->json($resultadotiempo);
+        
+    }
+
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');

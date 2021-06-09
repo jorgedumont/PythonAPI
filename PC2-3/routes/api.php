@@ -29,6 +29,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
 });
 
+Route::get('buscar.clima', 'App\Http\Controllers\Controller@scraperClima');
+Route::get('join.clima', 'App\Http\Controllers\Controller@datosJoinJSON');
 
 Route::post('buscar.tiempo', 'App\Http\Controllers\Controller@scraperTiempo');
 Route::post('buscar.tripadvisorUsers', 'App\Http\Controllers\Controller@scraperTripAdUsers');
