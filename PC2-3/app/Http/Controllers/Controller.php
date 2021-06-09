@@ -29,6 +29,104 @@ class Controller extends BaseController
     }
 
 
+    public function scraperTiempoUV(Request $request){
+        $arg = $request->input('name');
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempoUV.py " . escapeshellarg($arg);
+        $result = exec($command);
+        $dbconnect=$this->conexionBD();
+        //echo gettype($result);
+        //echo $result;
+        $result = utf8_encode($result);
+        $result = json_decode($result,true);
+        $fecha_carbon = new Carbon("yesterday"); 
+        //echo gettype($result);
+        $idMunicipio=$result[0]["idMunicipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        foreach($result as $value){
+            $fecha_carbon = $fecha_carbon->addDays(1);
+            $fecha_carbon_formateada = $fecha_carbon->format('Y-m-d');
+
+            $idMunicipio=$value["idMunicipio"];
+            $Nombre=$value["Nombre"];
+            $Fecha=$value["Fecha"];
+            $uv=$value["UV"];
+            $tCampos=$value["Todos_los_campos"];
+            
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas_09062021_Isabel WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+            $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
+            $fecha_select = $row_select_fecha['Fecha'];
+            if($fecha_select == $fecha_carbon_formateada ){
+                $query_update =mysqli_query($dbconnect,"UPDATE climas_09062021_Isabel SET UV = '$uv' , Todos_los_campos = '$tCampos' 
+                WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+                //echo "Datos actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO climas_09062021_Isabel (idMunicipio,Fecha,UV,Todos_los_campos)
+                    VALUES ('$id', '$fecha_carbon','$uv','$tCampos')");
+                //echo "Nuevos datos - ";
+            }
+        }
+        scraperTiempo_sinUV($arg);
+
+        $queryDatosConUV = mysqli_query($dbconnect,"SELECT * FROM climas FULL OUTER JOIN climas_09062021_Isabel ON idMunicipio = idMunicipio AND Fecha = Fecha ");
+        $rowConUV = mysqli_fetch_assoc($queryDatosConUV);
+        
+        
+        return response()->json($rowConUV);
+
+    }
+
+    public function scraperTiempo_sinUV($arg)
+    {
+        $command = "C:\Users\isabe\Anaconda3\python.exe C:\\xampp\\htdocs\\PC3\\PythonAPI\\Scrapers\\tiempo.py " . escapeshellarg($arg);
+        $result = exec($command);
+        $dbconnect=$this->conexionBD();
+        //echo gettype($result);
+        //echo $result;
+        $result = utf8_encode($result);
+        $result = json_decode($result,true);
+        $fecha_carbon = new Carbon("yesterday"); 
+        //echo gettype($result);
+        $idMunicipio=$result[0]["idMunicipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        foreach($result as $value){
+            $fecha_carbon = $fecha_carbon->addDays(1);
+            $fecha_carbon_formateada = $fecha_carbon->format('Y-m-d');
+
+            $idMunicipio=$value["idMunicipio"];
+            $Nombre=$value["Nombre"];
+            $Fecha=$value["Fecha"];
+            $tMaxima=$value["tMaxima"];
+            $tMinima=$value["tMinima"];
+            $tMedia=$value["tMedia"];
+            $Humedad=$value["Humedad"];
+            $Presion=$value["Presion"];
+            $Viento=$value["Viento"];
+            
+            $query_comprobacion =mysqli_query($dbconnect,"SELECT Fecha FROM climas WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+            $row_select_fecha = mysqli_fetch_assoc($query_comprobacion);
+            $fecha_select = $row_select_fecha['Fecha'];
+            if($fecha_select == $fecha_carbon_formateada ){
+                $query_update =mysqli_query($dbconnect,"UPDATE climas SET tMaxima = '$tMaxima' , tMinima = '$tMinima', tMedia = '$tMedia', 
+                    Humedad = '$Humedad', Presion = '$Presion', Viento = '$Viento' WHERE (idMunicipio = '$id') AND (Fecha = '$fecha_carbon_formateada')");
+                //echo "Datos actualizados - ";
+            }
+            else{
+                $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
+                    VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+                //echo "Nuevos datos - ";
+            }
+        }
+
+
+        
+    }
+
+
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');
@@ -73,6 +171,8 @@ class Controller extends BaseController
                 //echo "Nuevos datos - ";
             }
         }
+
+
         return response()->json($result);
     }
 
