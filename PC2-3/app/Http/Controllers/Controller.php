@@ -28,12 +28,71 @@ class Controller extends BaseController
         }
     }
 
-
     public function scraperTiempo(Request $request)
     {
         $arg = $request->input('name');
         $vPython = env('PYTHON_PATH');
         $vScript = env('TIEMPO_SCRIPT_PATH');
+        $command =  $vPython." ".$vScript." ".escapeshellarg($arg);
+        $result = exec($command);
+        $dbconnect=$this->conexionBD();
+        $vScript2 = env('TIEMPO_SCRIPT_PATH_COPIA');
+        $command2 =  $vPython." ".$vScript2." ".escapeshellarg($arg);
+        $result2 = exec($command2);
+        $result = utf8_encode($result);
+        $result = json_decode($result,true);
+        $result2 = utf8_encode($result2);
+        $result2 = json_decode($result2,true);
+        $fecha_carbon = new Carbon("yesterday"); 
+        //echo gettype($result);
+        $idMunicipio=$result[0]["idMunicipio"];
+        $query = mysqli_query($dbconnect,"SELECT id FROM municipios WHERE Nombre = '$idMunicipio'");
+        $row = mysqli_fetch_assoc($query);
+        $id = $row['id'];
+        foreach($result as $value){
+            $idMunicipio=$value["idMunicipio"];
+            $UV=$value["UV"];
+            $Descripcion=$value["Descripcion"];
+            $Minutos_Piel_Clara=$value["Minutos_Piel_Clara"];
+            $Minutos_Piel_Oscura=$value["Minutos_Piel_Oscura"];
+            $Factor_Proteccion_Piel_Clara=$value["Factor_Proteccion_Piel_Clara"];
+            $Factor_Proteccion_Piel_Oscura=$value["Factor_Proteccion_Piel_Oscura"];
+                $query2 = mysqli_query($dbconnect,"INSERT INTO uvs (idMunicipio,UV,Descripcion,Minutos_Piel_Clara,Minutos_Piel_Oscura
+                ,Factor_Proteccion_Piel_Clara,Factor_Proteccion_Piel_Oscura)
+                    VALUES ('$idMunicipio','$UV','$Descripcion', '$Minutos_Piel_Clara', '$Minutos_Piel_Oscura', '$Factor_Proteccion_Piel_Clara', '$Factor_Proteccion_Piel_Oscura')");
+                //echo "Nuevos datos - ";
+            }
+        foreach($result2 as $value2){
+            $idMunicipio=$value2["idMunicipio"];
+            $Fecha=$value2["Fecha"];
+            $tMaxima=$value2["tMaxima"];
+            $tMinima=$value2["tMinima"];
+            $tMedia=$value2["tMedia"];
+            $Humedad=$value2["Humedad"];
+            $Presion=$value2["Presion"];
+            $Viento=$value2["Viento"];
+                $query2 = mysqli_query($dbconnect,"INSERT INTO climas (idMunicipio,Fecha,tMaxima,tMinima,tMedia,Humedad,Presion,Viento)
+                    VALUES ('$id', '$fecha_carbon','$tMaxima','$tMinima','$tMedia','$Humedad','$Presion','$Viento')");
+                //echo "Nuevos datos - ";
+        }
+        
+        $query2 = mysqli_query($dbconnect,"SELECT climas.tMaxima, climas.tMinima,climas.tMedia,climas.Humedad,climas.Presion,climas.Viento, uvs.UV,uvs.Descripcion,uvs.Minutos_Piel_Clara,uvs.Minutos_Piel_Oscura
+                ,uvs.Factor_Proteccion_Piel_Clara,uvs.Factor_Proteccion_Piel_Oscura
+        FROM climas
+        INNER JOIN uvs ON climas.idMunicipio=uvs.idMunicipio LIMIT 5");
+        while($filatiempo = mysqli_fetch_assoc($query2)){
+            $resultadotiempo[]=$filatiempo;
+        }
+
+        return response()->json($resultadotiempo);
+    }
+
+
+    public function scraperTiempo_old(Request $request)
+    {
+        $arg = $request->input('name');
+        $vPython = env('PYTHON_PATH');
+        $vScript = env('TIEMPO_SCRIPT_PATH_COPIA');
         $command =  $vPython." ".$vScript." ".escapeshellarg($arg);
         $result = exec($command);
         $dbconnect=$this->conexionBD();

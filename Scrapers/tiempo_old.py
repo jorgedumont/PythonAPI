@@ -12,36 +12,34 @@ def cargarPueblo2(nombrepueblo):
     print(url)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    columnas = ["idMunicipio"]
-    columnas2 = ["UV","Descripcion", "Minutos_Piel_Clara", "Minutos_Piel_Oscura", "Factor_Proteccion_Piel_Clara", "Factor_Proteccion_Piel_Oscura"]
+    columnas = ["idMunicipio","Nombre", "Fecha", "tMaxima", "tMinima", "tMedia"]
+    columnas2 = ["Humedad", "Presion", "Viento"]
     df = pd.DataFrame(columns=columnas)
     df2 = pd.DataFrame(columns=columnas2)
     todosdias = soup.find("div", {"class": "tiledias"})
     for dia in todosdias.find_all("td"):
-        fecha = dia.find("span", {"class": "day"})
-        fecha = fecha.get_text()
+        diasemana = dia.find("h3")
+        fecha = dia.find("span", {"class": "day"}).get_text()
+        maxima = dia.find("span", {"class": "t max"})
+        minima = dia.find("span", {"class": "t min"})
+        temp11 = int(maxima.get_text().replace("°", ""))
+        temp22 = int(minima.get_text().replace("°", ""))
+        tempmedia = int((temp11 + temp22)) / 2
         nombrepueblo = nombrepueblo.replace("-", " ")
-        fila = {"idMunicipio":nombrepueblo}
+        fila = {"idMunicipio":nombrepueblo,"Nombre": diasemana.get_text(), "Fecha": fecha, "tMaxima": temp11, "tMinima": temp22,
+                "tMedia": tempmedia}
         df = df.append(fila, ignore_index=True)
-    uv = soup.find("table", {"class": "tablagenerica"})
-    datosblabla = uv.find_all("tr")[2:]
-    for datos in datosblabla:
-        datos1 = datos.find_all("td")
-        UV = datos1[0]
-        UV = UV.get_text()
-        descripcion = datos1[1]
-        descripcion = descripcion.get_text()
-        exposicionpielclara = datos1[2]
-        exposicionpielclara = exposicionpielclara.get_text()
-        exposicionpieloscura = datos1[3]
-        exposicionpieloscura = exposicionpieloscura.get_text()
-        factorpielclara = datos1[4]
-        factorpielclara = factorpielclara.get_text()
-        factorpieloscura = datos1[5]
-        factorpieloscura = factorpieloscura.get_text()
-        fila2 = {"UV": UV,"Descripcion": descripcion, "Minutos_Piel_Clara": exposicionpielclara, 
-        "Minutos_Piel_Oscura" : exposicionpieloscura, "Factor_Proteccion_Piel_Clara": factorpielclara, 
-        "Factor_Proteccion_Piel_Oscura": factorpieloscura}
+    detalle = soup.find("div", {"class": "datadias detallado"})
+    for datos in detalle.find_all("td"):
+        datos1 = datos.find_all("span", {"class": "hrd"})
+        humedad = datos1[0]
+        print(humedad)
+        humedad = humedad.get_text().replace("%","")
+        presion = datos1[1]
+        presion = presion.get_text().replace("hPa","")
+        viento = datos1[2]
+        viento = viento.get_text().replace("km/h","")
+        fila2 = {"Humedad": humedad, "Presion": presion, "Viento": viento}
         df2 = df2.append(fila2, ignore_index=True)
     dfcombinado = pd.concat([df, df2], axis=1)
     #print(dfcombinado)
@@ -57,9 +55,8 @@ def comprobarPueblo(nombrepueblo):
     return nombrepueblo.lower() in nombrespueblos
 
 #print('¿Que localidad estas buscando?')
-#nombrepueblo = argv[1]
- #Hay que pasar el argv entrecomillado en la shell
-nombrepueblo = 'tres cantos'
+nombrepueblo = argv[1] #Hay que pasar el argv entrecomillado en la shell
+#nombrepueblo = 'tres cantos'
 if comprobarPueblo(nombrepueblo):
     cargarPueblo2(nombrepueblo)
 else:
